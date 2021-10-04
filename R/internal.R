@@ -53,22 +53,28 @@ n_x = function(x, n) {
 
 encodeX = function(X, types) {
   X = matrix(unlist(X), nrow = nrow(X), ncol = ncol(X))
+  negate = rep(1, length(types))
   colmin_mat = matrix(apply(X, 2, function(x) min(x, na.rm = TRUE)), nrow = nrow(X), ncol = ncol(X), byrow = TRUE)
   colmax_mat = matrix(apply(X, 2, function(x) max(x, na.rm = TRUE)), nrow = nrow(X), ncol = ncol(X), byrow = TRUE)
   if (sum(types == "bin") > 0) {
-  X_bin = X[ , types == "bin"]
-  X[ , types == "bin"][X_bin == colmin_mat[ , types == "bin"]] = 0; X[ , types == "bin"][X_bin == colmax_mat[ , types == "bin"]] = 1
+    X_bin = X[ , types == "bin"]
+    X[ , types == "bin"][X_bin == colmin_mat[ , types == "bin"]] = 0; X[ , types == "bin"][X_bin == colmax_mat[ , types == "bin"]] = 1
   }
   if (sum(types == "tru") > 0) {
-  X_tru = X[ , types == "tru"]
-  X[ , types == "tru"] = X_tru - colmin_mat[ , types == "tru"]
+    X_tru = X[ , types == "tru"]
+    X[ , types == "tru"] = X_tru - colmin_mat[ , types == "tru"]
+  }
+  if (sum(types == "utr") > 0) {
+    X_utr = X[ , types == "utr"]
+    X[ , types == "utr"] = colmax_mat[ , types == "utr"] - X_utr
+    negate[types == "utr"] = - 1; types[types == "utr"] = "tru"
   }
   if (sum(types == "ter") > 0) {
-  X_ter = X[ , types == "ter"]
-  X[ , types == "ter"][X_ter == colmin_mat[ , types == "ter"]] = 0; X[ , types == "ter"][X_ter == colmax_mat[ , types == "ter"]] = 2
-  X[ , types == "ter"][(!(is.na(X_ter))) & (X_ter != colmin_mat[ , types == "ter"]) & (X_ter != colmax_mat[ , types == "ter"])] = 1
+    X_ter = X[ , types == "ter"]
+    X[ , types == "ter"][X_ter == colmin_mat[ , types == "ter"]] = 0; X[ , types == "ter"][X_ter == colmax_mat[ , types == "ter"]] = 2
+    X[ , types == "ter"][(!(is.na(X_ter))) & (X_ter != colmin_mat[ , types == "ter"]) & (X_ter != colmax_mat[ , types == "ter"])] = 1
   }
-  return(as.matrix(X))
+  return(list(X = as.matrix(X), types = types, negate = negate))
 }
 
 zratios = function(X, types) {

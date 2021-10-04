@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mingze Huang, Christian L. Müller, Irina Gaynanova" />
 
-<meta name="date" content="2021-08-23" />
+<meta name="date" content="2021-10-04" />
 
 <title>latentcor</title>
 
@@ -163,7 +163,7 @@ div.csl-indent {
 
 <h1 class="title toc-ignore">latentcor</h1>
 <h4 class="author">Mingze Huang, Christian L. Müller, Irina Gaynanova</h4>
-<h4 class="date">2021-08-23</h4>
+<h4 class="date">2021-10-04</h4>
 
 
 
@@ -171,13 +171,17 @@ div.csl-indent {
 <h1>Introduction</h1>
 <p>R package <code>latentcor</code> utilizes the powerful semi-parametric latent Gaussian copula models to estimate latent correlations between mixed data types. The package allows to estimate correlations between any of continuous/binary/ternary/zero-inflated (truncated) variable types. The underlying implementation takes advantage of fast multi-linear interpolation scheme with a clever choice of grid points that give the package a small memory footprint, and allows to use the latent correlations with sub-sampling and bootstrapping.</p>
 </div>
+<div id="statement-of-need" class="section level1">
+<h1>Statement of need</h1>
+<p>No R software package is currently available that allows accurate and fast correlation estimation from mixed variable data in a unifying manner. The R package <code>latentcor</code>, introduced here, thus represents the first stand-alone R package for computation of latent correlation that takes into account all variable types (continuous/binary/ordinal/zero-inflated), comes with an optimized memory footprint, and is computationally efficient, essentially making latent correlation estimation almost as fast as rank-based correlation estimation.</p>
+</div>
 <div id="getting-started" class="section level1">
 <h1>Getting started</h1>
 <div id="a-simple-example-with-two-variables" class="section level2">
 <h2>A simple example with two variables</h2>
 <p>First, we will generate a pair of variables with different types using a sample size <span class="math inline">\(n=100\)</span> which will serve as example data. Here first variable will be ternary, and second variable will be continuous.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>simdata <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span></code></pre></div>
-<p>The output of <code>GenData</code> is a list with 2 elements:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>simdata <span class="ot">=</span> <span class="fu">gen_data</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span></code></pre></div>
+<p>The output of <code>gen_data</code> is a list with 2 elements:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(simdata)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;X&quot;     &quot;plotX&quot;</span></span></code></pre></div>
 <ul>
@@ -185,21 +189,21 @@ div.csl-indent {
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> simdata<span class="sc">$</span>X</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X, <span class="at">n =</span> 6L)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]        [,2]</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    0  0.20587026</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    1 -0.04915793</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    1 -0.65222833</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    2  0.89411877</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    0  0.20746957</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    0 -0.50552757</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]       [,2]</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1 -1.5682561</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0  0.6227895</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    0  0.2543698</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0 -0.0799874</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    0 -0.6853879</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    0  1.0298423</span></span></code></pre></div>
 <ul>
-<li><code>plotX</code>: NULL (<code>showplot = FALSE</code>, can be changed to display the plot of generated data in<code>GenData</code> input).</li>
+<li><code>plotX</code>: NULL (<code>showplot = FALSE</code>, can be changed to display the plot of generated data in<code>gen_data</code> input).</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>simdata<span class="sc">$</span>plotX</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
-<p>Then we can estimate the latent correlation matrix based on these 2 variables using <code>estR</code> function.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span></code></pre></div>
-<p>The output of <code>estR</code> is a list with several elements:</p>
+<p>Then we can estimate the latent correlation matrix based on these 2 variables using <code>latentcor</code> function.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">=</span> <span class="fu">latentcor</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span></code></pre></div>
+<p>The output of <code>latentcor</code> is a list with several elements:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(estimate)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;zratios&quot;    &quot;K&quot;          &quot;R&quot;          &quot;Rpointwise&quot; &quot;plotR&quot;</span></span></code></pre></div>
 <ul>
@@ -215,31 +219,31 @@ div.csl-indent {
 <li><code>K</code>: Kendall <span class="math inline">\(\tau\)</span> (<span class="math inline">\(\tau_{a}\)</span>) correlation matrix for these 2 variables.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>K</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.2359596</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.2359596 1.0000000</span></span></code></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.2545455</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.2545455 1.0000000</span></span></code></pre></div>
 <ul>
 <li><code>Rpointwise</code>: matrix of pointwise estimated correlations. Due to pointwise estimation, <code>Rpointwise</code> is not guaranteed to be positive semi-definite</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>Rpointwise</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.4309563</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.4309563 1.0000000</span></span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.4630137</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.4630137 1.0000000</span></span></code></pre></div>
 <ul>
 <li><code>R</code>: estimated final latent correlation matrix, this matrix is guaranteed to be strictly positive definite (through <code>nearPD</code> projection and parameter <code>nu</code>, see Mathematical framework for estimation)</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>R</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.4305253</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.4305253 1.0000000</span></span></code></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.4625507</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.4625507 1.0000000</span></span></code></pre></div>
 <ul>
-<li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code> in <code>estR</code>. Otherwise displays a heatmap of latent correlation matrix.</li>
+<li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code> in <code>latentcor</code>. Otherwise displays a heatmap of latent correlation matrix.</li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>plotR</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
-<div id="another-example-with-real-dataset" class="section level2">
-<h2>Another example with real dataset</h2>
+<div id="example-with-mtcars-dataset" class="section level2">
+<h2>Example with mtcars dataset</h2>
 <p>We use the build-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars, <span class="at">n =</span> 6L)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
@@ -323,666 +327,173 @@ div.csl-indent {
 <span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1  2  3  4  6  8 </span></span>
 <span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 10  3 10  1  1</span></span></code></pre></div>
-<p>Then we can estimate the latent correlation matrix for all variables of <code>mtcars</code> by using <code>estR</code> function.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars <span class="ot">=</span> <span class="fu">estR</span>(mtcars, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span>
+<p>Then we can estimate the latent correlation matrix for all variables of <code>mtcars</code> by using <code>latentcor</code> function.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars <span class="ot">=</span> <span class="fu">latentcor</span>(mtcars, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Using Matrix::nearPD since Minimum eigenvalue of latent correlation matrix is -0.203053866491842 smaller than 0.</span></span></code></pre></div>
-<p>The output of <code>estR</code> for <code>mtcars</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(estimate_mtcars)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;zratios&quot;    &quot;K&quot;          &quot;R&quot;          &quot;Rpointwise&quot; &quot;plotR&quot;</span></span></code></pre></div>
+<p>Note that the determination of variable types can also be done automatically by <code>latentcor</code> package using <code>get_types</code> function:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_types</span>(mtcars)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;con&quot; &quot;ter&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;bin&quot; &quot;bin&quot; &quot;ter&quot; &quot;con&quot;</span></span></code></pre></div>
+<p>This function is run automatically inside <code>latentcor</code> if the <code>types</code> are not supplied by the user, however the automatic determination of types takes extra time, so we recommend to specify <code>types</code> explicitly if they are known in advance.</p>
+<p>The output of <code>latentcor</code> for <code>mtcars</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(estimate_mtcars)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;zratios&quot;    &quot;K&quot;          &quot;R&quot;          &quot;Rpointwise&quot; &quot;plotR&quot;</span></span></code></pre></div>
 <ul>
 <li><code>zratios</code>: zratios for corresponding variables in <code>mtcars</code>.</li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>zratios</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.34375 0.56250</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[3]]</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[4]]</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[5]]</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[6]]</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[7]]</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[8]]</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.5625</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[9]]</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.59375</span></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[10]]</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.46875 0.84375</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[11]]</span></span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>zratios</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.34375 0.56250</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[5]]</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[6]]</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[7]]</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[8]]</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.5625</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[9]]</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.59375</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[10]]</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.46875 0.84375</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[11]]</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 <ul>
 <li><code>K</code>: Kendall <span class="math inline">\(\tau\)</span> (<span class="math inline">\(\tau_{a}\)</span>) correlation matrix for variables in <code>mtcars</code>.</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>K</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.6431452 -0.7580645 -0.7278226  0.45564516 -0.7197581</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.6431452  1.0000000  0.6592742  0.6310484 -0.44354839  0.5907258</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.7580645  0.6592742  1.0000000  0.6532258 -0.48991935  0.7358871</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.7278226  0.6310484  0.6532258  1.0000000 -0.37298387  0.6008065</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.4556452 -0.4435484 -0.4899194 -0.3729839  1.00000000 -0.5383065</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.7197581  0.5907258  0.7358871  0.6008065 -0.53830645  1.0000000</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.3125000 -0.3649194 -0.2983871 -0.4657258  0.03225806 -0.1411290</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.4173387 -0.4475806 -0.4274194 -0.4435484  0.26411290 -0.3467742</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.3286290 -0.2842742 -0.3649194 -0.2116935  0.40120968 -0.4314516</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.3427419 -0.3326613 -0.3770161 -0.2197581  0.45967742 -0.4314516</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.4395161  0.3326613  0.3608871  0.5161290 -0.08266129  0.3245968</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec          vs          am        gear        carb</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.31250000  0.41733871  0.32862903  0.34274194 -0.43951613</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.36491935 -0.44758065 -0.28427419 -0.33266129  0.33266129</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.29838710 -0.42741935 -0.36491935 -0.37701613  0.36088710</span></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.46572581 -0.44354839 -0.21169355 -0.21975806  0.51612903</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.03225806  0.26411290  0.40120968  0.45967742 -0.08266129</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.14112903 -0.34677419 -0.43145161 -0.43145161  0.32459677</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.46774194 -0.11895161 -0.07258065 -0.44354839</span></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.46774194  1.00000000  0.08467742  0.15322581 -0.36088710</span></span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.11895161  0.08467742  1.00000000  0.43346774 -0.03629032</span></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.07258065  0.15322581  0.43346774  1.00000000  0.06854839</span></span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.44354839 -0.36088710 -0.03629032  0.06854839  1.00000000</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>K</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.6431452 -0.7580645 -0.7278226  0.45564516 -0.7197581</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.6431452  1.0000000  0.6592742  0.6310484 -0.44354839  0.5907258</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.7580645  0.6592742  1.0000000  0.6532258 -0.48991935  0.7358871</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.7278226  0.6310484  0.6532258  1.0000000 -0.37298387  0.6008065</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.4556452 -0.4435484 -0.4899194 -0.3729839  1.00000000 -0.5383065</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.7197581  0.5907258  0.7358871  0.6008065 -0.53830645  1.0000000</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.3125000 -0.3649194 -0.2983871 -0.4657258  0.03225806 -0.1411290</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.4173387 -0.4475806 -0.4274194 -0.4435484  0.26411290 -0.3467742</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.3286290 -0.2842742 -0.3649194 -0.2116935  0.40120968 -0.4314516</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.3427419 -0.3326613 -0.3770161 -0.2197581  0.45967742 -0.4314516</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.4395161  0.3326613  0.3608871  0.5161290 -0.08266129  0.3245968</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec          vs          am        gear        carb</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.31250000  0.41733871  0.32862903  0.34274194 -0.43951613</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.36491935 -0.44758065 -0.28427419 -0.33266129  0.33266129</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.29838710 -0.42741935 -0.36491935 -0.37701613  0.36088710</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.46572581 -0.44354839 -0.21169355 -0.21975806  0.51612903</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.03225806  0.26411290  0.40120968  0.45967742 -0.08266129</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.14112903 -0.34677419 -0.43145161 -0.43145161  0.32459677</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.46774194 -0.11895161 -0.07258065 -0.44354839</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.46774194  1.00000000  0.08467742  0.15322581 -0.36088710</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.11895161  0.08467742  1.00000000  0.43346774 -0.03629032</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.07258065  0.15322581  0.43346774  1.00000000  0.06854839</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.44354839 -0.36088710 -0.03629032  0.06854839  1.00000000</span></span></code></pre></div>
 <ul>
 <li><code>Rpointwise</code>: matrix of pointwise estimated correlations for <code>mtcars</code>.</li>
 </ul>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>Rpointwise</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9990000 -0.9286530 -0.9099905  0.65616525 -0.9046652</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9990000  1.0000000  0.9990000  0.9900378 -0.77195772  0.9525997</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9286530  0.9990000  1.0000000  0.8552768 -0.69582182  0.9151697</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9099905  0.9900378  0.8552768  1.0000000 -0.55293425  0.8097609</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6561652 -0.7719577 -0.6958218 -0.5529342  1.00000000 -0.7483492</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9046652  0.9525997  0.9151697  0.8097609 -0.74834918  1.0000000</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4713967 -0.6540431 -0.4517316 -0.6680316  0.05064917 -0.2198737</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8727316 -0.9623421 -0.8905658 -0.9188458  0.57685875 -0.7416377</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.7178533 -0.7124468 -0.7888268 -0.4746999  0.85723711 -0.9121559</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6234660 -0.6441105 -0.6786359 -0.4119442  0.80260415 -0.7617271</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6368382  0.6025491  0.5370028  0.7247928 -0.12947951  0.4880685</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec         vs          am       gear        carb</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.47139674  0.8727316  0.71785333  0.6234660 -0.63683817</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.65404313 -0.9623421 -0.71244682 -0.6441105  0.60254911</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.45173164 -0.8905658 -0.78882677 -0.6786359  0.53700280</span></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.66803158 -0.9188458 -0.47469992 -0.4119442  0.72479279</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.05064917  0.5768588  0.85723711  0.8026041 -0.12947951</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.21987367 -0.7416377 -0.91215587 -0.7617271  0.48806852</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.9599123 -0.27004807 -0.1385035 -0.64170875</span></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.95991229  1.0000000  0.27236999  0.4087924 -0.76863616</span></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.27004807  0.2723700  1.00000000  0.9941469 -0.08284094</span></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.13850346  0.4087924  0.99414687  1.0000000  0.13086286</span></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.64170875 -0.7686362 -0.08284094  0.1308629  1.00000000</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>Rpointwise</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9990000 -0.9286530 -0.9099905  0.65616525 -0.9046652</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9990000  1.0000000  0.9990000  0.9900378 -0.77195772  0.9525997</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9286530  0.9990000  1.0000000  0.8552768 -0.69582182  0.9151697</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9099905  0.9900378  0.8552768  1.0000000 -0.55293425  0.8097609</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6561652 -0.7719577 -0.6958218 -0.5529342  1.00000000 -0.7483492</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9046652  0.9525997  0.9151697  0.8097609 -0.74834918  1.0000000</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4713967 -0.6540431 -0.4517316 -0.6680316  0.05064917 -0.2198737</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8727316 -0.9623421 -0.8905658 -0.9188458  0.57685875 -0.7416377</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.7178533 -0.7124468 -0.7888268 -0.4746999  0.85723711 -0.9121559</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6234660 -0.6441105 -0.6786359 -0.4119442  0.80260415 -0.7617271</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6368382  0.6025491  0.5370028  0.7247928 -0.12947951  0.4880685</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec         vs          am       gear        carb</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.47139674  0.8727316  0.71785333  0.6234660 -0.63683817</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.65404313 -0.9623421 -0.71244682 -0.6441105  0.60254911</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.45173164 -0.8905658 -0.78882677 -0.6786359  0.53700280</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.66803158 -0.9188458 -0.47469992 -0.4119442  0.72479279</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.05064917  0.5768588  0.85723711  0.8026041 -0.12947951</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.21987367 -0.7416377 -0.91215587 -0.7617271  0.48806852</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.9599123 -0.27004807 -0.1385035 -0.64170875</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.95991229  1.0000000  0.27236999  0.4087924 -0.76863616</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.27004807  0.2723700  1.00000000  0.9941469 -0.08284094</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.13850346  0.4087924  0.99414687  1.0000000  0.13086286</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.64170875 -0.7686362 -0.08284094  0.1308629  1.00000000</span></span></code></pre></div>
 <ul>
 <li><code>R</code>: estimated final latent correlation matrix for <code>mtcars</code>.</li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>R</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9609031 -0.9415043 -0.9158428  0.66735827 -0.9184175</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9609031  1.0000000  0.9642266  0.9413892 -0.73792461  0.9100566</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9415043  0.9642266  1.0000000  0.8623242 -0.71394453  0.9357387</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9158428  0.9413892  0.8623242  1.0000000 -0.55916149  0.8168236</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6673583 -0.7379246 -0.7139445 -0.5591615  1.00000000 -0.7655481</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9184175  0.9100566  0.9357387  0.8168236 -0.76554810  1.0000000</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4823428 -0.5822593 -0.4633043 -0.6776150  0.07314342 -0.2320168</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8544713 -0.9256791 -0.8492790 -0.9218190  0.53281338 -0.7091408</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.6969207 -0.6621142 -0.7398814 -0.4763248  0.82651611 -0.8702507</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6335341 -0.6404076 -0.7007359 -0.4148761  0.81916584 -0.7795446</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6389233  0.6083585  0.5440334  0.7239277 -0.13666971  0.4925960</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec         vs          am       gear        carb</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.48234281  0.8544713  0.69692066  0.6335341 -0.63892330</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.58225925 -0.9256791 -0.66211416 -0.6404076  0.60835846</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.46330426 -0.8492790 -0.73988144 -0.7007359  0.54403338</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.67761499 -0.9218190 -0.47632483 -0.4148761  0.72392768</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.07314342  0.5328134  0.82651611  0.8191658 -0.13666971</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.23201675 -0.7091408 -0.87025068 -0.7795446  0.49259599</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.8394639 -0.21423820 -0.1320981 -0.65840975</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.83946385  1.0000000  0.34069073  0.3558147 -0.72748608</span></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.21423820  0.3406907  1.00000000  0.9329160 -0.06824438</span></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.13209815  0.3558147  0.93291605  1.0000000  0.12065393</span></span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.65840975 -0.7274861 -0.06824438  0.1206539  1.00000000</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>R</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9609031 -0.9415043 -0.9158428  0.66735827 -0.9184175</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9609031  1.0000000  0.9642266  0.9413892 -0.73792461  0.9100566</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9415043  0.9642266  1.0000000  0.8623242 -0.71394453  0.9357387</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9158428  0.9413892  0.8623242  1.0000000 -0.55916149  0.8168236</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6673583 -0.7379246 -0.7139445 -0.5591615  1.00000000 -0.7655481</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9184175  0.9100566  0.9357387  0.8168236 -0.76554810  1.0000000</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4823428 -0.5822593 -0.4633043 -0.6776150  0.07314342 -0.2320168</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8544713 -0.9256791 -0.8492790 -0.9218190  0.53281338 -0.7091408</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.6969207 -0.6621142 -0.7398814 -0.4763248  0.82651611 -0.8702507</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6335341 -0.6404076 -0.7007359 -0.4148761  0.81916584 -0.7795446</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6389233  0.6083585  0.5440334  0.7239277 -0.13666971  0.4925960</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec         vs          am       gear        carb</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.48234281  0.8544713  0.69692066  0.6335341 -0.63892330</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.58225925 -0.9256791 -0.66211416 -0.6404076  0.60835846</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.46330426 -0.8492790 -0.73988144 -0.7007359  0.54403338</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.67761499 -0.9218190 -0.47632483 -0.4148761  0.72392768</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.07314342  0.5328134  0.82651611  0.8191658 -0.13666971</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.23201675 -0.7091408 -0.87025068 -0.7795446  0.49259599</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.8394639 -0.21423820 -0.1320981 -0.65840975</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.83946385  1.0000000  0.34069073  0.3558147 -0.72748608</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.21423820  0.3406907  1.00000000  0.9329160 -0.06824438</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.13209815  0.3558147  0.93291605  1.0000000  0.12065393</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.65840975 -0.7274861 -0.06824438  0.1206539  1.00000000</span></span></code></pre></div>
 <ul>
-<li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code> in <code>estR</code>. Otherwise displays a heatmap of latent correlation matrix for <code>mtcars</code> (See <a href="https://rpubs.com/mingzehuang/797937">heatmap of latent correlation (approx) for mtcars</a>).</li>
+<li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code> in <code>latentcor</code>. Otherwise displays a heatmap of latent correlation matrix for <code>mtcars</code> (See <a href="https://rpubs.com/mingzehuang/797937">heatmap of latent correlation (approx) for mtcars</a>).</li>
 </ul>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>plotR</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>plotR</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
-</div>
-<div id="mathematical-framework-for-estimation" class="section level1">
-<h1>Mathematical framework for estimation</h1>
-<div id="latent-gaussian-copula-model-for-mixed-data" class="section level2">
-<h2>Latent Gaussian Copula Model for Mixed Data</h2>
-<p><code>latentcor</code> utilizes the powerful semi-parametric latent Gaussian copula models to estimate latent correlations between mixed data types (continuous/binary/ternary/truncated or zero-inflated). Below we review the definitions for each type.</p>
-<p><strong><em>Definition of continuous model</em></strong> <span class="citation">(Fan et al. 2017)</span></p>
-<p>A random <span class="math inline">\(X\in\cal{R}^{p}\)</span> satisfies the Gaussian copula (or nonparanormal) model if there exist monotonically increasing <span class="math inline">\(f=(f_{j})_{j=1}^{p}\)</span> with <span class="math inline">\(Z_{j}=f_{j}(X_{j})\)</span> satisfying <span class="math inline">\(Z\sim N_{p}(0, \Sigma)\)</span>, <span class="math inline">\(\sigma_{jj}=1\)</span>; we denote <span class="math inline">\(X\sim NPN(0, \Sigma, f)\)</span>.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;con&quot;</span>)<span class="sc">$</span>X</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>X</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1]</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  0.8025116</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.0168194</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] -2.2159450</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.2073208</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] -0.3521075</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] -1.3127480</span></span></code></pre></div>
-<p><strong><em>Definition of binary model</em></strong> <span class="citation">(Fan et al. 2017)</span></p>
-<p>A random <span class="math inline">\(X\in\cal{R}^{p}\)</span> satisfies the binary latent Gaussian copula model if there exists <span class="math inline">\(W\sim NPN(0, \Sigma, f)\)</span> such that <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})\)</span>, where <span class="math inline">\(I(\cdot)\)</span> is the indicator function and <span class="math inline">\(c_{j}\)</span> are constants.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;bin&quot;</span>)<span class="sc">$</span>X</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>X</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    1</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    1</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    0</span></span></code></pre></div>
-<p><strong><em>Definition of ternary model</em></strong> <span class="citation">(Quan, Booth, and Wells 2018)</span></p>
-<p>A random <span class="math inline">\(X\in\cal{R}^{p}\)</span> satisfies the ternary latent Gaussian copula model if there exists <span class="math inline">\(W\sim NPN(0, \Sigma, f)\)</span> such that <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})+I(W_{j}&gt;c&#39;_{j})\)</span>, where <span class="math inline">\(I(\cdot)\)</span> is the indicator function and <span class="math inline">\(c_{j}&lt;c&#39;_{j}\)</span> are constants.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;ter&quot;</span>)<span class="sc">$</span>X</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>X</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    1</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    2</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    1</span></span></code></pre></div>
-<p><strong><em>Definition of truncated or zero-inflated model</em></strong> <span class="citation">(Yoon, Carroll, and Gaynanova 2020)</span></p>
-<p>A random <span class="math inline">\(X\in\cal{R}^{p}\)</span> satisfies the truncated latent Gaussian copula model if there exists <span class="math inline">\(W\sim NPN(0, \Sigma, f)\)</span> such that <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})W_{j}\)</span>, where <span class="math inline">\(I(\cdot)\)</span> is the indicator function and <span class="math inline">\(c_{j}\)</span> are constants.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;tru&quot;</span>)<span class="sc">$</span>X</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>X</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.0000000</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.0000000</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 1.1227278</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] 0.0000000</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] 1.3762351</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] 0.7223574</span></span></code></pre></div>
-<p><strong><em>Mixed latent Gaussian copula model</em></strong></p>
-<p>The mixed latent Gaussian copula model jointly models <span class="math inline">\(W=(W_{1}, W_{2}, W_{3}, W_{4})\sim NPN(0, \Sigma, f)\)</span> such that <span class="math inline">\(X_{1j}=W_{1j}\)</span>, <span class="math inline">\(X_{2j}=I(W_{2j}&gt;c_{2j})\)</span>, <span class="math inline">\(X_{3j}=I(W_{3j}&gt;c_{3j})+I(W_{3j}&gt;c&#39;_{3j})\)</span> and <span class="math inline">\(X_{4j}=I(W_{4j}&gt;c_{4j})W_{4j}\)</span>.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="st">&quot;234820&quot;</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))<span class="sc">$</span>X</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1] [,2] [,3]      [,4]</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] -0.5728663    0    1 0.0000000</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -1.5632883    0    0 0.0000000</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.4600555    1    1 0.2634213</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] -1.5186510    1    1 0.0000000</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] -1.5438165    0    1 0.0000000</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] -0.5656219    0    0 0.0000000</span></span></code></pre></div>
-</div>
-<div id="moment-based-estimation-of-sigma-based-on-bridge-functions" class="section level2">
-<h2>Moment-based estimation of <span class="math inline">\(\Sigma\)</span> based on bridge functions</h2>
-<p>The estimation of latent correlation matrix <span class="math inline">\(\Sigma\)</span> is achieved via the <strong>bridge function</strong> <span class="math inline">\(F\)</span> which is defined such that <span class="math inline">\(E(\hat{\tau}_{jk})=F(\sigma_{jk})\)</span>, where <span class="math inline">\(\sigma_{jk}\)</span> is the latent correlation between variables <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span>, and <span class="math inline">\(\hat{\tau}_{jk}\)</span> is the corresponding sample Kendall’s <span class="math inline">\(\tau\)</span>.</p>
-<p><strong><em>Kendall’s <span class="math inline">\(\tau\)</span> (<span class="math inline">\(\tau_{a}\)</span>)</em></strong></p>
-<p>Given observed <span class="math inline">\(\mathbf{x}_{j}, \mathbf{x}_{k}\in\cal{R}^{n}\)</span>,</p>
-<p><span class="math display">\[
-\hat{\tau}_{jk}=\hat{\tau}(\mathbf{x}_{j}, \mathbf{x}_{k})=\frac{2}{n(n-1)}\sum_{1\le i&lt;i&#39;\le n}sign(x_{ij}-x_{i&#39;j})sign(x_{ik}-x_{i&#39;k}),
-\]</span> where <span class="math inline">\(n\)</span> is the sample size.</p>
-<p><code>latentcor</code> calculates pairwise Kendall’s <span class="math inline">\(\widehat \tau\)</span> as part of the estimation process</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>K <span class="ot">=</span> estimate<span class="sc">$</span>K</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>K</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.2557576 0.2456566 0.3331313</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.2557576 1.0000000 0.1555556 0.2339394</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.2456566 0.1555556 1.0000000 0.2183838</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.3331313 0.2339394 0.2183838 1.0000000</span></span></code></pre></div>
-<p>Using <span class="math inline">\(F\)</span> and <span class="math inline">\(\widehat \tau_{jk}\)</span>, a moment-based estimator is <span class="math inline">\(\hat{\sigma}_{jk}=F^{-1}(\hat{\tau}_{jk})\)</span> with the corresponding <span class="math inline">\(\hat{\Sigma}\)</span> being consistent for <span class="math inline">\(\Sigma\)</span> <span class="citation">(Fan et al. 2017; Quan, Booth, and Wells 2018; Yoon, Carroll, and Gaynanova 2020)</span>.</p>
-<p>The explicit form of <strong>bridge function</strong> <span class="math inline">\(F\)</span> has been derived for all combinations of continuous(C)/binary(B)/ternary(N)/truncated(T) variable types, and we summarize the corresponding references. Each of this combinations is implemented in <code>latentcor</code>.</p>
-<table>
-<colgroup>
-<col width="11%" />
-<col width="22%" />
-<col width="22%" />
-<col width="22%" />
-<col width="22%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Type</th>
-<th>continuous</th>
-<th>binary</th>
-<th>ternary</th>
-<th>zero-inflated (truncated)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>continuous</td>
-<td><span class="citation">Liu, Lafferty, and Wasserman (2009)</span></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr class="even">
-<td>binary</td>
-<td><span class="citation">Fan et al. (2017)</span></td>
-<td><span class="citation">Fan et al. (2017)</span></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr class="odd">
-<td>ternary</td>
-<td><span class="citation">Quan, Booth, and Wells (2018)</span></td>
-<td><span class="citation">Quan, Booth, and Wells (2018)</span></td>
-<td><span class="citation">Quan, Booth, and Wells (2018)</span></td>
-<td>-</td>
-</tr>
-<tr class="even">
-<td>zero-inflated (truncated)</td>
-<td><span class="citation">Yoon, Carroll, and Gaynanova (2020)</span></td>
-<td><span class="citation">Yoon, Carroll, and Gaynanova (2020)</span></td>
-<td>See Appendix</td>
-<td><span class="citation">Yoon, Carroll, and Gaynanova (2020)</span></td>
-</tr>
-</tbody>
-</table>
-<p>Below we provide an explicit form of <span class="math inline">\(F\)</span> for each combination.</p>
-<p><strong>Theorem (explicit form of bridge function)</strong> Let <span class="math inline">\(W_{1}\in\cal{R}^{p_{1}}\)</span>, <span class="math inline">\(W_{2}\in\cal{R}^{p_{2}}\)</span>, <span class="math inline">\(W_{3}\in\cal{R}^{p_{3}}\)</span>, <span class="math inline">\(W_{4}\in\cal{R}^{p_{4}}\)</span> be such that <span class="math inline">\(W=(W_{1}, W_{2}, W_{3}, W_{4})\sim NPN(0, \Sigma, f)\)</span> with <span class="math inline">\(p=p_{1}+p_{2}+p_{3}+p_{4}\)</span>. Let <span class="math inline">\(X=(X_{1}, X_{2}, X_{3}, X_{4})\in\cal{R}^{p}\)</span> satisfy <span class="math inline">\(X_{j}=W_{j}\)</span> for <span class="math inline">\(j=1,...,p_{1}\)</span>, <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})\)</span> for <span class="math inline">\(j=p_{1}+1, ..., p_{1}+p_{2}\)</span>, <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})+I(W_{j}&gt;c&#39;_{j})\)</span> for <span class="math inline">\(j=p_{1}+p_{2}+1, ..., p_{3}\)</span> and <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})W_{j}\)</span> for <span class="math inline">\(j=p_{1}+p_{2}+p_{3}+1, ..., p\)</span> with <span class="math inline">\(\Delta_{j}=f(c_{j})\)</span>. The rank-based estimator of <span class="math inline">\(\Sigma\)</span> based on the observed <span class="math inline">\(n\)</span> realizations of <span class="math inline">\(X\)</span> is the matrix <span class="math inline">\(\mathbf{\hat{R}}\)</span> with <span class="math inline">\(\hat{r}_{jj}=1\)</span>, <span class="math inline">\(\hat{r}_{jk}=\hat{r}_{kj}=F^{-1}(\hat{\tau}_{jk})\)</span> with block structure</p>
-<p><span class="math display">\[
-\mathbf{\hat{R}}=\begin{pmatrix}
-F_{CC}^{-1}(\hat{\tau}) &amp; F_{CB}^{-1}(\hat{\tau}) &amp; F_{CN}^{-1}(\hat{\tau}) &amp; F_{CT}^{-1}(\hat{\tau})\\
-F_{BC}^{-1}(\hat{\tau}) &amp; F_{BB}^{-1}(\hat{\tau}) &amp; F_{BN}^{-1}(\hat{\tau}) &amp; F_{BT}^{-1}(\hat{\tau})\\
-F_{NC}^{-1}(\hat{\tau}) &amp; F_{NB}^{-1}(\hat{\tau}) &amp; F_{NN}^{-1}(\hat{\tau}) &amp; F_{NT}^{-1}(\hat{\tau})\\
-F_{TC}^{-1}(\hat{\tau}) &amp; F_{TB}^{-1}(\hat{\tau}) &amp; F_{TN}^{-1}(\hat{\tau}) &amp; F_{TT}^{-1}(\hat{\tau})
-\end{pmatrix}
-\]</span> <span class="math display">\[
-F(\cdot)=\begin{cases}
-CC:\ 2\sin^{-1}(r)/\pi \\
-\\
-BC: \ 4\Phi_{2}(\Delta_{j},0;r/\sqrt{2})-2\Phi(\Delta_{j}) \\
-\\
-BB: \ 2\{\Phi_{2}(\Delta_{j},\Delta_{k};r)-\Phi(\Delta_{j})\Phi(\Delta_{k})\}  \\
-\\
-NC: \ 4\Phi_{2}(\Delta_{j}^{2},0;r/\sqrt{2})-2\Phi(\Delta_{j}^{2})+4\Phi_{3}(\Delta_{j}^{1},\Delta_{j}^{2},0;\Sigma_{3a}(r))-2\Phi(\Delta_{j}^{1})\Phi(\Delta_{j}^{2})\\
-\\
-NB: \ 2\Phi_{2}(\Delta_{j}^{2},\Delta_{k},r)\{1-\Phi(\Delta_{j}^{1})\}-2\Phi(\Delta_{j}^{2})\{\Phi(\Delta_{k})-\Phi_{2}(\Delta_{j}^{1},\Delta_{k},r)\} \\
-\\
-NN: \ 2\Phi_{2}(\Delta_{j}^{2},\Delta_{k}^{2};r)\Phi_{2}(-\Delta_{j}^{1},-\Delta_{k}^{1};r)-2\{\Phi(\Delta_{j}^{2})-\Phi_{2}(\Delta_{j}^{2},\Delta_{k}^{1};r)\}\{\Phi(\Delta_{k}^{2})-\Phi_{2}(\Delta_{j}^{1},\Delta_{k}^{2};r)\} \\
-\\
-TC: \ -2\Phi_{2}(-\Delta_{j},0;1/\sqrt{2})+4\Phi_{3}(-\Delta_{j},0,0;\Sigma_{3b}(r)) \\
-\\
-TB: \ 2\{1-\Phi(\Delta_{j})\}\Phi(\Delta_{k})-2\Phi_{3}(-\Delta_{j},\Delta_{k},0;\Sigma_{3c}(r))-2\Phi_{3}(-\Delta_{j},\Delta_{k},0;\Sigma_{3d}(r))  \\
-\\
-TN: \ -2\Phi(-\Delta_{k}^{1})\Phi(\Delta_{k}^{2}) + 2\Phi_{3}(-\Delta_{k}^{1},\Delta_{k}^{2},\Delta_{j};\Sigma_{3e}(r))+2\Phi_{4}(-\Delta_{k}^{1},\Delta_{k}^{2},-\Delta_{j},0;\Sigma_{4a}(r))+2\Phi_{4}(-\Delta_{k}^{1},\Delta_{k}^{2},-\Delta_{j},0;\Sigma_{4b}(r)) \\
-\\
-TT: \ -2\Phi_{4}(-\Delta_{j},-\Delta_{k},0,0;\Sigma_{4c}(r))+2\Phi_{4}(-\Delta_{j},-\Delta_{k},0,0;\Sigma_{4d}(r)) \\
-\end{cases}
-\]</span></p>
-<p>where <span class="math inline">\(\Delta_{j}=\Phi^{-1}(\pi_{0j})\)</span>, <span class="math inline">\(\Delta_{k}=\Phi^{-1}(\pi_{0k})\)</span>, <span class="math inline">\(\Delta_{j}^{1}=\Phi^{-1}(\pi_{0j})\)</span>, <span class="math inline">\(\Delta_{j}^{2}=\Phi^{-1}(\pi_{0j}+\pi_{1j})\)</span>, <span class="math inline">\(\Delta_{k}^{1}=\Phi^{-1}(\pi_{0k})\)</span>, <span class="math inline">\(\Delta_{k}^{2}=\Phi^{-1}(\pi_{0k}+\pi_{1k})\)</span>,</p>
-<p><span class="math display">\[
-\Sigma_{3a}(r)=
-\begin{pmatrix}
-1 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; -\frac{r}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} &amp; 1
-\end{pmatrix}, \;\;\;
-\Sigma_{3b}(r)=
-\begin{pmatrix}
-1 &amp; \frac{1}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}}\\
-\frac{1}{\sqrt{2}} &amp; 1 &amp; r \\
-\frac{r}{\sqrt{2}} &amp; r &amp; 1
-\end{pmatrix}, \;\;\;
-\Sigma_{3c}(r)=
-\begin{pmatrix}
-1 &amp; -r &amp; \frac{1}{\sqrt{2}} \\
--r &amp; 1 &amp; -\frac{r}{\sqrt{2}} \\
-\frac{1}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} &amp; 1
-\end{pmatrix},
-\]</span></p>
-<p><span class="math display">\[
-\Sigma_{3d}(r)=
-\begin{pmatrix}
-1 &amp; 0 &amp; -\frac{1}{\sqrt{2}} \\
-0 &amp; 1 &amp; -\frac{r}{\sqrt{2}} \\
--\frac{1}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} &amp; 1
-\end{pmatrix}, \;\;\;
-\Sigma_{3e}(r)=
-\begin{pmatrix}
-1 &amp; 0 &amp; 0 \\
-0 &amp; 1 &amp; r \\
-0 &amp; r &amp; 1
-\end{pmatrix},  \;\;\;
-\Sigma_{4a}(r)=
-\begin{pmatrix}
-1 &amp; 0 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; -r &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; -r &amp; 1 &amp; -\frac{1}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; -\frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix},
-\]</span></p>
-<p><span class="math display">\[
-\Sigma_{4b}(r)=
-\begin{pmatrix}
-1 &amp; 0 &amp; r &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-r &amp; 0 &amp; 1 &amp; \frac{1}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}, \;\;\;
-\Sigma_{4c}(r)=
-\begin{pmatrix}
-1 &amp; 0 &amp; \frac{1}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; -\frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} \\
-\frac{1}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} &amp; 1 &amp; -r \\
--\frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} &amp; -r &amp; 1
-\end{pmatrix}\;\;\text{and}\;\;
-\Sigma_{4d}(r)=
-\begin{pmatrix}
-1 &amp; r &amp; \frac{1}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} \\
-r &amp; 1 &amp; \frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} \\
-\frac{1}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; 1 &amp; r \\
-\frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} &amp; r &amp; 1
-\end{pmatrix}.
-\]</span></p>
-</div>
-</div>
-<div id="estimation-methods" class="section level1">
-<h1>Estimation methods</h1>
-<p>Given the form of bridge function <span class="math inline">\(F\)</span>, obtaining a moment-based estimation <span class="math inline">\(\widehat \sigma_{jk}\)</span> requires inversion of <span class="math inline">\(F\)</span>. <code>latentcor</code> implements two methods for calcultation of the inversion.</p>
-<div id="original-method-method-original" class="section level2">
-<h2>Original method (<code>method = &quot;original&quot;</code>)</h2>
-<p>Original estimation approach relies on numerical inversion of <span class="math inline">\(F\)</span> based on solving uni-root optimization problem.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">method =</span> <span class="st">&quot;original&quot;</span>)</span></code></pre></div>
-<p><strong><em>Algorithm for Original method</em></strong></p>
-<p><strong>Input</strong>: <span class="math inline">\(F(r)=F(r, \mathbf{\Delta})\)</span> - bridge function based on the type of variables <span class="math inline">\(j\)</span>, <span class="math inline">\(k\)</span></p>
-<ul>
-<li>Step 1. Calculate <span class="math inline">\(\hat{\tau}_{jk}\)</span> using (1).</li>
-</ul>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>K</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.2557576 0.2456566 0.3331313</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.2557576 1.0000000 0.1555556 0.2339394</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.2456566 0.1555556 1.0000000 0.2183838</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.3331313 0.2339394 0.2183838 1.0000000</span></span></code></pre></div>
-<ul>
-<li>Step 2. For binary/truncated variable <span class="math inline">\(j\)</span>, set <span class="math inline">\(\hat{\mathbf{\Delta}}_{j}=\hat{\Delta}_{j}=\Phi^{-1}(\pi_{0j})\)</span> with <span class="math inline">\(\pi_{0j}=\sum_{i=1}^{n}\frac{I(x_{ij}=0)}{n}\)</span>. For ternary variable <span class="math inline">\(j\)</span>, set <span class="math inline">\(\hat{\mathbf{\Delta}}_{j}=(\hat{\Delta}_{j}^{1}, \hat{\Delta}_{j}^{2})\)</span> where <span class="math inline">\(\hat{\Delta}_{j}^{1}=\Phi^{-1}(\pi_{0j})\)</span> and <span class="math inline">\(\hat{\Delta}_{j}^{2}=\Phi^{-1}(\pi_{0j}+\pi_{1j})\)</span> with <span class="math inline">\(\pi_{0j}=\sum_{i=1}^{n}\frac{I(x_{ij}=0)}{n}\)</span> and <span class="math inline">\(\pi_{1j}=\sum_{i=1}^{n}\frac{I(x_{ij}=1)}{n}\)</span>.</li>
-</ul>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>zratios</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[3]]</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.3 0.8</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[4]]</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
-<ul>
-<li>Compute <span class="math inline">\(F^{-1}(\hat{\tau}_{jk})\)</span> as <span class="math inline">\(\hat{r}_{jk}=argmin\{F(r)-\hat{\tau}_{jk}\}^{2}\)</span> solved via <code>optimize</code> function in <em>R</em>.</li>
-</ul>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>R</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.5524373 0.4476503 0.5820345</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.5524373 1.0000000 0.4046173 0.5815691</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.4476503 0.4046173 1.0000000 0.4649222</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.5820345 0.5815691 0.4649222 1.0000000</span></span></code></pre></div>
-</div>
-<div id="approximation-method-method-approx" class="section level2">
-<h2>Approximation method (<code>method = &quot;approx&quot;</code>)</h2>
-<p>A faster approximation method is based on multi-linear interpolation of pre-computed inverse bridge function on a fixed grid of points. This is possible as the inverse bridge function is an analytic function of at most 5 parameters:</p>
-<ul>
-<li>Kendall’s <span class="math inline">\(\tau\)</span></li>
-<li>Proportion of zeros in the 1st variable</li>
-<li>(Possibly) proportion of zeros and ones in the 1st variable</li>
-<li>(Possibly) proportion of zeros in the 2nd variable</li>
-<li>(Possibly) proportion of zeros and ones in the 2nd variable</li>
-</ul>
-<p>In short, d-dimensional multi-linear interpolation uses a weighted average of <span class="math inline">\(2^{d}\)</span> neighbors to approximate the function values at the points within the d-dimensional cube of the neighbors, and to perform interpolation, <code>latentcor</code> takes advantage of the R package <code>chebpol</code> <span class="citation">(Gaure 2019)</span>. This approximation method has been first described in <span class="citation">(Yoon, Müller, and Gaynanova 2021)</span> for continuous/binary/truncated cases. In <code>latentcor</code>, we additionally implement ternary case, and optimize the choice of grid as well as interpolation boundary for faster computations with smaller memory footprint.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">method =</span> <span class="st">&quot;approx&quot;</span>)</span></code></pre></div>
-<p><strong><em>Algorithm for Approximation method </em></strong></p>
-<p><strong>Input</strong>: Let <span class="math inline">\(\check{g}=h(g)\)</span>, pre-computed values <span class="math inline">\(F^{-1}(h^{-1}(\check{g}))\)</span> on a fixed grid <span class="math inline">\(\check{g}\in\check{\cal{G}}\)</span> based on the type of variables <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span>. For binary/continuous case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j})\)</span>; for binary/binary case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j}, \check{\Delta}_{k})\)</span>; for truncated/continuous case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j})\)</span>; for truncated/truncated case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j}, \check{\Delta}_{k})\)</span>; for ternary/continuous case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j}^{1}, \check{\Delta}_{j}^{2})\)</span>; for ternary/binary case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j}^{1}, \check{\Delta}_{j}^{2}, \check{\Delta}_{k})\)</span>; for ternary/truncated case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j}^{1}, \check{\Delta}_{j}^{2}, \check{\Delta}_{k})\)</span>; for ternay/ternary case, <span class="math inline">\(\check{g}=(\check{\tau}_{jk}, \check{\Delta}_{j}^{1}, \check{\Delta}_{j}^{2}, \check{\Delta}_{k}^{1}, \check{\Delta}_{k}^{2})\)</span>.</p>
-<ul>
-<li><p>Step 1 and Step 2 same as Original method.</p></li>
-<li><p>Step 3. If <span class="math inline">\(|\hat{\tau}_{jk}|\le \mbox{ratio}\times \bar{\tau}_{jk}(\cdot)\)</span>, apply interpolation; otherwise apply Original method.</p></li>
-</ul>
-<p>To avoid interpolation in areas with high approximation errors close to the boundary, we use hybrid scheme in Step 3. For the derivation of approximate bound for BC, BB, TC, TB, TT cases see <span class="citation">Yoon, Müller, and Gaynanova (2021)</span>. The derivation of approximate bound for NC, NB, NN, NT case is in the Appendix.</p>
-<p><span class="math display">\[
-\bar{\tau}_{jk}(\cdot)=
-\begin{cases}
-2\pi_{0j}(1-\pi_{0j})  &amp;   for \; BC \; case\\
-2\min(\pi_{0j},\pi_{0k})\{1-\max(\pi_{0j}, \pi_{0k})\}  &amp;   for \; BB \; case\\
-2\{\pi_{0j}(1-\pi_{0j})+\pi_{1j}(1-\pi_{0j}-\pi_{1j})\}  &amp;   for \; NC \; case\\
-2\min(\pi_{0j}(1-\pi_{0j})+\pi_{1j}(1-\pi_{0j}-\pi_{1j}),\pi_{0k}(1-\pi_{0k}))  &amp;   for \; NB \; case\\
-2\min(\pi_{0j}(1-\pi_{0j})+\pi_{1j}(1-\pi_{0j}-\pi_{1j}), \\
-\;\;\;\;\;\;\;\;\;\;\pi_{0k}(1-\pi_{0k})+\pi_{1k}(1-\pi_{0k}-\pi_{1k}))  &amp;   for \; NN \; case\\
-1-(\pi_{0j})^{2}  &amp;   for \; TC \; case\\
-2\max(\pi_{0k},1-\pi_{0k})\{1-\max(\pi_{0k},1-\pi_{0k},\pi_{0j})\}  &amp;   for \; TB \; case\\
-1-\{\max(\pi_{0j},\pi_{0k},\pi_{1k},1-\pi_{0k}-\pi_{1k})\}^{2}  &amp;   for \; TN \; case\\
-1-\{\max(\pi_{0j},\pi_{0k})\}^{2}  &amp;   for \; TT \; case\\
-\end{cases}
-\]</span></p>
-<p>By default, <code>latentcor</code> uses <span class="math inline">\(\mbox{ratio} = 0.9\)</span>, but this value can be modified by the user</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">method =</span> <span class="st">&quot;approx&quot;</span>, <span class="at">ratio =</span> <span class="fl">0.99</span>)<span class="sc">$</span>R</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.5522684 0.4472342 0.5817297</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.5522684 1.0000000 0.4054908 0.5803080</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.4472342 0.4054908 1.0000000 0.4563203</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.5817297 0.5803080 0.4563203 1.0000000</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">method =</span> <span class="st">&quot;approx&quot;</span>, <span class="at">ratio =</span> <span class="fl">0.4</span>)<span class="sc">$</span>R</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.5524373 0.4472342 0.5820345</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.5524373 1.0000000 0.4054908 0.5815691</span></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.4472342 0.4054908 1.0000000 0.4563203</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.5820345 0.5815691 0.4563203 1.0000000</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">method =</span> <span class="st">&quot;original&quot;</span>)<span class="sc">$</span>R</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.5524373 0.4476503 0.5820345</span></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.5524373 1.0000000 0.4046173 0.5815691</span></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.4476503 0.4046173 1.0000000 0.4649222</span></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.5820345 0.5815691 0.4649222 1.0000000</span></span></code></pre></div>
-<p>The lower is the <code>ratio</code>, the closer is the approximation method to original method (with <code>ratio = 0</code> being equivalent to <code>method = &quot;original&quot;</code>), but also the higher is the cost of computations.</p>
-<p><strong>Rescaled Grid for Interpolation</strong></p>
-<p>Since <span class="math inline">\(|\hat{\tau}|\le \bar{\tau}\)</span>, the grid does not need to cover the whole domain <span class="math inline">\(\tau\in[-1, 1]\)</span>. To optimize memory associated with storing the grid, we rescale <span class="math inline">\(\tau\)</span> as follows: <span class="math inline">\(\check{\tau}_{jk}=\tau_{jk}/\bar{\tau}_{jk}\in[-1, 1]\)</span>, where <span class="math inline">\(\bar{\tau}_{jk}\)</span> is as defined above.</p>
-<p>In addition, for ternary variable <span class="math inline">\(j\)</span>, it always holds that <span class="math inline">\(\Delta_{j}^{2}&gt;\Delta_{j}^{1}\)</span> since <span class="math inline">\(\Delta_{j}^{1}=\Phi^{-1}(\pi_{0j})\)</span> and <span class="math inline">\(\Delta_{j}^{2}=\Phi^{-1}(\pi_{0j}+\pi_{1j})\)</span>. Thus, the grid should not cover the the area corresponding to <span class="math inline">\(\Delta_{j}^{2}\ge\Delta_{j}^{1}\)</span>. We thus rescale as follows: <span class="math inline">\(\check{\Delta}_{j}^{1}=\Delta_{j}^{1}/\Delta_{j}^{2}\in[0, 1]\)</span>; <span class="math inline">\(\check{\Delta}_{j}^{2}=\Delta_{j}^{2}\in[0, 1]\)</span>.</p>
-</div>
-<div id="adjustment-of-pointwise-estimator-for-positive-definiteness" class="section level2">
-<h2>Adjustment of pointwise-estimator for positive-definiteness</h2>
-<p>Since the estimation is performed point-wise, the resulting matrix of estimated latent correlations is not guaranteed to be positive semi-definite. For example, this could be expected when the sample size is small (and so the estimation error for each pairwise correlation is larger)</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="st">&quot;234820&quot;</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))<span class="sc">$</span>X</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>X</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1] [,2] [,3]      [,4]</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] -0.5182800    0    1 0.1021738</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -1.3017092    0    0 0.0000000</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.3145191    1    2 0.4213514</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] -0.6093291    0    1 1.2771610</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] -1.3175490    1    0 0.0000000</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] -0.7807245    1    1 0.0000000</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Rpointwise</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            X1         X2        X3         X4</span></span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1  1.0000000 -0.1477240 0.9990000  0.8548518</span></span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 -0.1477240  1.0000000 0.3523666 -0.5030324</span></span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3  0.9990000  0.3523666 1.0000000  0.9114307</span></span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4  0.8548518 -0.5030324 0.9114307  1.0000000</span></span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="fu">eigen</span>(out<span class="sc">$</span>Rpointwise)<span class="sc">$</span>values</span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  2.85954424  1.29130852  0.09944544 -0.25029820</span></span></code></pre></div>
-<p><code>latentcor</code> automatically corrects the pointwise estimator to be positive definite by making two adjustments. First, if <code>Rpointwise</code> has smallest eigenvalue less than zero, the <code>estR</code> projects this matrix to the nearest positive semi-definite matrix. The user is notified of this adjustment through the message (supressed in previous code chunk), e.g.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Using Matrix::nearPD since Minimum eigenvalue of latent correlation matrix is -0.25029819695076 smaller than 0.</span></span></code></pre></div>
-<p>Second, <code>latentcor</code> shrinks the adjusted matrix of correlations towards identity matrix using the parameter <span class="math inline">\(\nu\)</span> with default value of 0.001 (<code>nu = 0.001</code>), so that the resulting <code>R</code> is strictly positive definite with the minimal eigenvalue being greater or equal to <span class="math inline">\(\nu\)</span>. That is <span class="math display">\[
-R = (1 - \nu) \widetilde R + \nu I,
-\]</span> where <span class="math inline">\(\widetilde R\)</span> is the nearest positive semi-definite matrix to <code>Rpointwise</code>.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">nu =</span> <span class="fl">0.001</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Using Matrix::nearPD since Minimum eigenvalue of latent correlation matrix is -0.25029819695076 smaller than 0.</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Rpointwise</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            X1         X2        X3         X4</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1  1.0000000 -0.1477240 0.9990000  0.8548518</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 -0.1477240  1.0000000 0.3523666 -0.5030324</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3  0.9990000  0.3523666 1.0000000  0.9114307</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4  0.8548518 -0.5030324 0.9114307  1.0000000</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>R</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            X1         X2        X3         X4</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1  1.0000000 -0.1053533 0.9232992  0.9048072</span></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 -0.1053533  1.0000000 0.2372115 -0.4244433</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3  0.9232992  0.2372115 1.0000000  0.7723678</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4  0.9048072 -0.4244433 0.7723678  1.0000000</span></span></code></pre></div>
-<p>As a result, <code>R</code> and <code>Rpointwise</code> could be quite different when sample size <span class="math inline">\(n\)</span> is small. When <span class="math inline">\(n\)</span> is large and <span class="math inline">\(p\)</span> is moderate, the difference is typically driven by parameter <code>nu</code>.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="st">&quot;234820&quot;</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">GenData</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))<span class="sc">$</span>X</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">estR</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">nu =</span> <span class="fl">0.001</span>)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Rpointwise</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.5528213 0.4476819 0.5823120</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.5528213 1.0000000 0.4058967 0.5808889</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.4476819 0.4058967 1.0000000 0.4567771</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.5823120 0.5808889 0.4567771 1.0000000</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>R</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           X1        X2        X3        X4</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X1 1.0000000 0.5522684 0.4472342 0.5817297</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X2 0.5522684 1.0000000 0.4054908 0.5803080</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X3 0.4472342 0.4054908 1.0000000 0.4563203</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X4 0.5817297 0.5803080 0.4563203 1.0000000</span></span></code></pre></div>
-</div>
-</div>
-<div id="appendix" class="section level1">
-<h1>Appendix</h1>
-<div id="derivation-of-bridge-function-f-for-ternarytruncated-case" class="section level2">
-<h2>Derivation of bridge function <span class="math inline">\(F\)</span> for ternary/truncated case</h2>
-<p>Without loss of generality, let <span class="math inline">\(j=1\)</span> and <span class="math inline">\(k=2\)</span>. By the definition of Kendall’s <span class="math inline">\(\tau\)</span>, <span class="math display">\[
-    \tau_{12}=E(\hat{\tau}_{12})=E[\frac{2}{n(n-1)}\sum_{1\leq i\leq i&#39; \leq n} sign\{(X_{i1}-X_{i&#39;1})(X_{i2}-X_{i&#39;2})\}].
-\]</span> Since <span class="math inline">\(X_{1}\)</span> is ternary, <span class="math display">\[\begin{align}
-    &amp;sign(X_{1}-X_{1}&#39;) \nonumber\\ =&amp;[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{11})+I(U_{1}&gt;C_{12},U_{1}&#39;\leq C_{12})-I(U_{1}&gt;C_{12},U_{1}&#39;\leq C_{11})] \nonumber\\
-    &amp;-[I(U_{1}\leq C_{11}, U_{1}&#39;&gt;C_{11})+I(U_{1}\leq C_{12}, U_{1}&#39;&gt;C_{12})-I(U_{1}\leq C_{11}, U_{1}&#39;&gt;C_{12})] \nonumber\\
-    =&amp;[I(U_{1}&gt;C_{11})-I(U_{1}&gt;C_{11},U_{1}&#39;&gt;C_{11})+I(U_{1}&gt;C_{12})-I(U_{1}&gt;C_{12},U_{1}&#39;&gt;C_{12}) \nonumber\\
-    &amp;-I(U_{1}&gt;C_{12})+I(U_{1}&gt;C_{12},U_{1}&#39;&gt;C_{11})] \nonumber\\
-    &amp;-[I(U_{1}&#39;&gt;C_{11})-I(U_{1}&gt;C_{11},U_{1}&#39;&gt;C_{11})+I(U_{1}&#39;&gt;C_{12})-I(U_{1}&gt;C_{12},U_{1}&#39;&gt;C_{12}) \nonumber\\
-    &amp;-I(U_{1}&#39;&gt;C_{12})+I(U_{1}&gt;C_{11},U_{1}&#39;&gt;C_{12})] \nonumber\\
-    =&amp;I(U_{1}&gt;C_{11})+I(U_{1}&gt;C_{12},U_{1}&#39;&gt;C_{11})-I(U_{1}&#39;&gt;C_{11})-I(U_{1}&gt;C_{11},U_{1}&#39;&gt;C_{12}) \nonumber\\
-    =&amp;I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12})-I(U_{1}&#39;&gt;C_{11},U_{1}\leq C_{12}).
-\end{align}\]</span> Since <span class="math inline">\(X_{2}\)</span> is truncated, <span class="math inline">\(C_{1}&gt;0\)</span> and <span class="math display">\[\begin{align}
-    sign(X_{2}-X_{2}&#39;)=&amp;-I(X_{2}=0,X_{2}&#39;&gt;0)+I(X_{2}&gt;0,X_{2}&#39;=0) \nonumber\\
-    &amp;+I(X_{2}&gt;0,X_{2}&#39;&gt;0)sign(X_{2}-X_{2}&#39;) \nonumber\\
-    =&amp;-I(X_{2}=0)+I(X_{2}&#39;=0)+I(X_{2}&gt;0,X_{2}&#39;&gt;0)sign(X_{2}-X_{2}&#39;).
-\end{align}\]</span> Since <span class="math inline">\(f\)</span> is monotonically increasing, <span class="math inline">\(sign(X_{2}-X_{2}&#39;)=sign(Z_{2}-Z_{2}&#39;)\)</span>, <span class="math display">\[\begin{align}
-    \tau_{12}=&amp;E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12}) sign(X_{2}-X_{2}&#39;)] \nonumber\\ &amp;-E[I(U_{1}&#39;&gt;C_{11},U_{1}\leq C_{12}) sign(X_{2}-X_{2}&#39;)] \nonumber\\
-    =&amp;-E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12}) I(X_{2}=0)] \nonumber\\
-    &amp;+E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12}) I(X_{2}&#39;=0)] \nonumber\\
-    &amp;+E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12})I(X_{2}&gt;0,X_{2}&#39;&gt;0)sign(Z_{2}-Z_{2}&#39;)] \nonumber\\
-    &amp;+E[I(U_{1}&#39;&gt;C_{11},U_{1}\leq C_{12}) I(X_{2}=0)] \nonumber\\
-    &amp;-E[I(U_{1}&#39;&gt;C_{11},U_{1}\leq C_{12}) I(X_{2}&#39;=0)] \nonumber\\
-    &amp;-E[I(U_{1}&#39;&gt;C_{11},U_{1}\leq C_{12})I(X_{2}&gt;0,X_{2}&#39;&gt;0)sign(Z_{2}-Z_{2}&#39;)]  \nonumber\\
-    =&amp;-2E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12}) I(X_{2}=0)] \nonumber\\
-    &amp;+2E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12}) I(X_{2}&#39;=0)] \nonumber\\
-    &amp;+E[I(U_{1}&gt;C_{11},U_{1}&#39;\leq C_{12})I(X_{2}&gt;0,X_{2}&#39;&gt;0)sign(Z_{2}-Z_{2}&#39;)] \nonumber\\
-    &amp;-E[I(U_{1}&#39;&gt;C_{11},U_{1}\leq C_{12})I(X_{2}&gt;0,X_{2}&#39;&gt;0)sign(Z_{2}-Z_{2}&#39;)].
-\end{align}\]</span> From the definition of <span class="math inline">\(U\)</span>, let <span class="math inline">\(Z_{j}=f_{j}(U_{j})\)</span> and <span class="math inline">\(\Delta_{j}=f_{j}(C_{j})\)</span> for <span class="math inline">\(j=1,2\)</span>. Using <span class="math inline">\(sign(x)=2I(x&gt;0)-1\)</span>, we obtain <span class="math display">\[\begin{align}
-    \tau_{12}=&amp;-2E[I(Z_{1}&gt;\Delta_{11},Z_{1}&#39;\leq \Delta_{12},Z_{2}\leq \Delta_{2})]+2E[I(Z_{1}&gt;\Delta_{11},Z_{1}&#39;\leq \Delta_{12},Z_{2}&#39;\leq \Delta_{2})] \nonumber\\
-    &amp;+2E[I(Z_{1}&gt;\Delta_{11},Z_{1}&#39;\leq \Delta_{12})I(Z_{2}&gt;\Delta_{2},Z_{2}&#39;&gt;\Delta_{2},Z_{2}-Z_{2}&#39;&gt;0)] \nonumber\\
-    &amp;-2E[I(Z_{1}&#39;&gt;\Delta_{11},Z_{1}\leq \Delta_{12})I(Z_{2}&gt;\Delta_{2},Z_{2}&#39;&gt;\Delta_{2},Z_{2}-Z_{2}&#39;&gt;0)] \nonumber\\
-    =&amp;-2E[I(Z_{1}&gt;\Delta_{11},Z_{1}&#39;\leq \Delta_{12}, Z_{2}\leq \Delta_{2})]+2E[I(Z_{1}&gt;\Delta_{11},Z_{1}&#39;\leq \Delta_{12}, Z_{2}&#39;\leq \Delta_{2})] \nonumber\\
-    &amp;+2E[I(Z_{1}&gt;\Delta_{11},Z_{1}&#39;\leq\Delta_{12},Z_{2}&#39;&gt;\Delta_{2},Z_{2}&gt;Z_{2}&#39;)] \nonumber\\
-    &amp;-2E[I(Z_{1}&#39;&gt;\Delta_{11},Z_{1}\leq\Delta_{12},Z_{2}&#39;&gt;\Delta_{2},Z_{2}&gt;Z_{2}&#39;)].
-\end{align}\]</span> Since <span class="math inline">\(\{\frac{Z_{2}&#39;-Z_{2}}{\sqrt{2}}, -Z{1}\}\)</span>, <span class="math inline">\(\{\frac{Z_{2}&#39;-Z_{2}}{\sqrt{2}}, Z{1}&#39;\}\)</span> and <span class="math inline">\(\{\frac{Z_{2}&#39;-Z_{2}}{\sqrt{2}}, -Z{2}&#39;\}\)</span> are standard bivariate normally distributed variables with correlation <span class="math inline">\(-\frac{1}{\sqrt{2}}\)</span>, <span class="math inline">\(r/\sqrt{2}\)</span> and <span class="math inline">\(-\frac{r}{\sqrt{2}}\)</span>, respectively, by the definition of <span class="math inline">\(\Phi_3(\cdot,\cdot, \cdot;\cdot)\)</span> and <span class="math inline">\(\Phi_4(\cdot,\cdot, \cdot,\cdot;\cdot)\)</span> we have <span class="math display">\[\begin{align}
-    F_{NT}(r;\Delta_{j}^{1},\Delta_{j}^{2},\Delta_{k})= &amp; -2\Phi_{3}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},\Delta_{k};\begin{pmatrix}
-1 &amp; 0 &amp; -r \\
-0 &amp; 1 &amp; 0 \\
--r &amp; 0 &amp; 1
-\end{pmatrix} \right\} \nonumber\\
-    &amp;+2\Phi_{3}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},\Delta_{k};\begin{pmatrix}
-1 &amp; 0 &amp; 0 \\
-0 &amp; 1 &amp; r \\
-0 &amp; r &amp; 1
-\end{pmatrix}\right\}\nonumber \\
-    &amp; +2\Phi_{4}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k},0;\begin{pmatrix}
-1 &amp; 0 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; -r &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; -r &amp; 1 &amp; -\frac{1}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; -\frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}\right\} \nonumber\\
-    &amp;-2\Phi_{4}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k},0;\begin{pmatrix}
-1 &amp; 0 &amp; r &amp; -\frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; 0 &amp; -\frac{r}{\sqrt{2}} \\
-r &amp; 0 &amp; 1 &amp; -\frac{1}{\sqrt{2}} \\
--\frac{r}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} &amp; -\frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}\right\}.
-\end{align}\]</span> Using the facts that <span class="math display">\[\begin{align}
-&amp;\Phi_{4}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k},0;\begin{pmatrix}
-1 &amp; 0 &amp; r &amp; -\frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; 0 &amp; -\frac{r}{\sqrt{2}} \\
-r &amp; 0 &amp; 1 &amp; -\frac{1}{\sqrt{2}} \\
--\frac{r}{\sqrt{2}} &amp; -\frac{r}{\sqrt{2}} &amp; -\frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}\right\} \nonumber\\ &amp;+\Phi_{4}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k},0;\begin{pmatrix}
-1 &amp; 0 &amp; r &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-r &amp; 0 &amp; 1 &amp; \frac{1}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}\right\} \nonumber\\
-=&amp;\Phi_{3}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k};\begin{pmatrix}
-1 &amp; 0 &amp; 0 \\
-0 &amp; 1 &amp; r \\
-0 &amp; r &amp; 1
-\end{pmatrix}\right\}
-\end{align}\]</span> and <span class="math display">\[\begin{align}
-&amp;\Phi_{3}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k};\begin{pmatrix}
-1 &amp; 0 &amp; 0 \\
-0 &amp; 1 &amp; r \\
-0 &amp; r &amp; 1
-\end{pmatrix}\right\}+\Phi_{3}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},\Delta_{k};\begin{pmatrix}
-1 &amp; 0 &amp; -r \\
-0 &amp; 1 &amp; 0 \\
--r &amp; 0 &amp; 1
-\end{pmatrix} \right\} \nonumber\\
-=&amp;\Phi_{2}(-\Delta_{j}^{1},\Delta_{j}^{2};0)
-=\Phi(-\Delta_{j}^{1})\Phi(\Delta_{j}^{2}).
-\end{align}\]</span> So that, <span class="math display">\[\begin{align}
-    F_{NT}(r;\Delta_{j}^{1},\Delta_{j}^{2},\Delta_{k})= &amp; -2\Phi(-\Delta_{j}^{1})\Phi(\Delta_{j}^{2}) \nonumber\\
-    &amp;+2\Phi_{3}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},\Delta_{k};\begin{pmatrix}
-1 &amp; 0 &amp; 0 \\
-0 &amp; 1 &amp; r \\
-0 &amp; r &amp; 1
-\end{pmatrix}\right\}\nonumber \\
-    &amp; +2\Phi_{4}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k},0;\begin{pmatrix}
-1 &amp; 0 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; -r &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; -r &amp; 1 &amp; -\frac{1}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; -\frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}\right\} \nonumber\\
-    &amp;+2\Phi_{4}\left\{-\Delta_{j}^{1},\Delta_{j}^{2},-\Delta_{k},0;\begin{pmatrix}
-1 &amp; 0 &amp; r &amp; \frac{r}{\sqrt{2}} \\
-0 &amp; 1 &amp; 0 &amp; \frac{r}{\sqrt{2}} \\
-r &amp; 0 &amp; 1 &amp; \frac{1}{\sqrt{2}} \\
-\frac{r}{\sqrt{2}} &amp; \frac{r}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} &amp; 1
-\end{pmatrix}\right\}.
-\end{align}\]</span></p>
-<p>It is easy to get the bridge function for truncated/ternary case by switching <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span>.</p>
-</div>
-<div id="derivation-of-approximate-bound-for-the-ternarycontinuous-case" class="section level2">
-<h2>Derivation of approximate bound for the ternary/continuous case</h2>
-<p>Let <span class="math inline">\(n_{0x}=\sum_{i=1}^{n_x}I(x_{i}=0)\)</span>, <span class="math inline">\(n_{2x}=\sum_{i=1}^{n_x}I(x_{i}=2)\)</span>, <span class="math inline">\(\pi_{0x}=\frac{n_{0x}}{n_{x}}\)</span> and <span class="math inline">\(\pi_{2x}=\frac{n_{2x}}{n_{x}}\)</span>, then <span class="math display">\[\begin{align}
-    |\tau(\mathbf{x})|\leq &amp; \frac{n_{0x}(n-n_{0x})+n_{2x}(n-n_{0x}-n_{2x})}{\begin{pmatrix} n \\ 2 \end{pmatrix}} \nonumber\\
-    = &amp; 2\{\frac{n_{0x}}{n-1}-(\frac{n_{0x}}{n})(\frac{n_{0x}}{n-1})+\frac{n_{2x}}{n-1}-(\frac{n_{2x}}{n})(\frac{n_{0x}}{n-1})-(\frac{n_{2x}}{n})(\frac{n_{2x}}{n-1})\} \nonumber\\
-    \approx &amp; 2\{\frac{n_{0x}}{n}-(\frac{n_{0x}}{n})^2+\frac{n_{2x}}{n}-(\frac{n_{2x}}{n})(\frac{n_{0x}}{n})-(\frac{n_{2x}}{n})^2\} \nonumber\\
-    = &amp; 2\{\pi_{0x}(1-\pi_{0x})+\pi_{2x}(1-\pi_{0x}-\pi_{2x})\}
-\end{align}\]</span></p>
-<p>For ternary/binary and ternary/ternary cases, we combine the two individual bounds.</p>
-</div>
-<div id="derivation-of-approximate-bound-for-the-ternarytruncated-case" class="section level2">
-<h2>Derivation of approximate bound for the ternary/truncated case</h2>
-<p>Let <span class="math inline">\(\mathbf{x}\in\mathcal{R}^{n}\)</span> and <span class="math inline">\(\mathbf{y}\in\mathcal{R}^{n}\)</span> be the observed <span class="math inline">\(n\)</span> realizations of ternary and truncated variables, respectively. Let <span class="math inline">\(n_{0x}=\sum_{i=0}^{n}I(x_{i}=0)\)</span>, <span class="math inline">\(\pi_{0x}=\frac{n_{0x}}{n}\)</span>, <span class="math inline">\(n_{1x}=\sum_{i=0}^{n}I(x_{i}=1)\)</span>, <span class="math inline">\(\pi_{1x}=\frac{n_{1x}}{n}\)</span>, <span class="math inline">\(n_{2x}=\sum_{i=0}^{n}I(x_{i}=2)\)</span>, <span class="math inline">\(\pi_{2x}=\frac{n_{2x}}{n}\)</span>, <span class="math inline">\(n_{0y}=\sum_{i=0}^{n}I(y_{i}=0)\)</span>, <span class="math inline">\(\pi_{0y}=\frac{n_{0y}}{n}\)</span>, <span class="math inline">\(n_{0x0y}=\sum_{i=0}^{n}I(x_{i}=0 \;\&amp; \; y_{i}=0)\)</span>, <span class="math inline">\(n_{1x0y}=\sum_{i=0}^{n}I(x_{i}=1 \;\&amp; \; y_{i}=0)\)</span> and <span class="math inline">\(n_{2x0y}=\sum_{i=0}^{n}I(x_{i}=2 \;\&amp; \; y_{i}=0)\)</span> then <span class="math display">\[\begin{align}
-    |\tau(\mathbf{x}, \mathbf{y})|\leq &amp;
-    \frac{\begin{pmatrix}n \\ 2\end{pmatrix}-\begin{pmatrix}n_{0x} \\ 2\end{pmatrix}-\begin{pmatrix}n_{1x} \\ 2\end{pmatrix}-\begin{pmatrix} n_{2x} \\ 2 \end{pmatrix}-\begin{pmatrix}n_{0y} \\ 2\end{pmatrix}+\begin{pmatrix}n_{0x0y} \\ 2 \end{pmatrix}+\begin{pmatrix}n_{1x0y} \\ 2\end{pmatrix}+\begin{pmatrix}n_{2x0y} \\ 2\end{pmatrix}}{\begin{pmatrix}n \\ 2\end{pmatrix}} \nonumber
-\end{align}\]</span> Since <span class="math inline">\(n_{0x0y}\leq\min(n_{0x},n_{0y})\)</span>, <span class="math inline">\(n_{1x0y}\leq\min(n_{1x},n_{0y})\)</span> and <span class="math inline">\(n_{2x0y}\leq\min(n_{2x},n_{0y})\)</span> we obtain <span class="math display">\[\begin{align}
-     |\tau(\mathbf{x}, \mathbf{y})|\leq &amp;
-    \frac{\begin{pmatrix}n \\ 2\end{pmatrix}-\begin{pmatrix}n_{0x} \\ 2\end{pmatrix}-\begin{pmatrix}n_{1x} \\ 2\end{pmatrix}-\begin{pmatrix} n_{2x} \\ 2 \end{pmatrix}-\begin{pmatrix}n_{0y} \\ 2\end{pmatrix}}{\begin{pmatrix}n \\ 2\end{pmatrix}} \nonumber\\
-    &amp; +  \frac{\begin{pmatrix}\min(n_{0x},n_{0y}) \\ 2 \end{pmatrix}+\begin{pmatrix}\min(n_{1x},n_{0y}) \\ 2\end{pmatrix}+\begin{pmatrix}\min(n_{2x},n_{0y}) \\ 2\end{pmatrix}}{\begin{pmatrix}n \\ 2\end{pmatrix}} \nonumber\\
-    \leq &amp; \frac{\begin{pmatrix}n \\ 2\end{pmatrix}-\begin{pmatrix}\max(n_{0x},n_{1x},n_{2x},n_{0y}) \\ 2\end{pmatrix}}{\begin{pmatrix}n \\ 2\end{pmatrix}} \nonumber\\
-    \leq &amp; 1-\frac{\max(n_{0x},n_{1x},n_{2x},n_{0y})(\max(n_{0x},n_{1x},n_{2x},n_{0y})-1)}{n(n-1)} \nonumber\\
-    \approx &amp; 1-(\frac{\max(n_{0x},n_{1x},n_{2x},n_{0y})}{n})^{2} \nonumber\\
-    =&amp; 1-\{\max(\pi_{0x},\pi_{1x},\pi_{2x},\pi_{0y})\}^{2} \nonumber\\
-    =&amp; 1-\{\max(\pi_{0x},(1-\pi_{0x}-\pi_{2x}),\pi_{2x},\pi_{0y})\}^{2}
-\end{align}\]</span></p>
-<p>It is easy to get the approximate bound for truncated/ternary case by switching <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<div id="example-using-latentcor-with-subsampling" class="section level2">
+<h2>Example using latentcor with subsampling</h2>
+<p>While <code>latentcor</code> can determine the types of each variable automatically, it is recommended to call <code>get_types</code> first and then supply <code>types</code> explicitly to save the computation time, especially when using latentcor with sub-sampling (which we illustrate below).</p>
+<p>First, we will generate variables with different types using a sample size <span class="math inline">\(n=100\)</span> which will serve as an example data for subsampling.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>simdata2 <span class="ot">=</span> <span class="fu">gen_data</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">types =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;ter&quot;</span>, <span class="dv">3</span>), <span class="st">&quot;con&quot;</span>, <span class="fu">rep</span>(<span class="st">&quot;bin&quot;</span>, <span class="dv">3</span>)))</span></code></pre></div>
+<p>To use the data with subsampling, we recommend to first run <code>get_types</code> on the full data</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>types <span class="ot">=</span> <span class="fu">get_types</span>(simdata2<span class="sc">$</span>X)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>types</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ter&quot; &quot;ter&quot; &quot;ter&quot; &quot;con&quot; &quot;bin&quot; &quot;bin&quot; &quot;bin&quot;</span></span></code></pre></div>
+<p>Then, when doing subsampling, we recommend to explicitly supply identified types to <code>latentcor</code>. We illustrate using 10 subsamples, each of size 80.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">=</span> <span class="fu">proc.time</span>()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select a random subsample of size 80</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  subsample <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">80</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate latent correlation on subsample specifying the types</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  Rs <span class="ot">=</span> <span class="fu">latentcor</span>(simdata2<span class="sc">$</span>X[subsample, ], <span class="at">types =</span> types)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> start_time</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.02    0.00    0.02</span></span></code></pre></div>
+<p>Compared with</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">=</span> <span class="fu">proc.time</span>()</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select a random subsample of size 80</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  subsample <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">80</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate latent correlation on subsample specifying the types</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  Rs <span class="ot">=</span> <span class="fu">latentcor</span>(simdata2<span class="sc">$</span>X[subsample, ], <span class="at">types =</span> <span class="cn">NULL</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> start_time</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.03    0.00    0.03</span></span></code></pre></div>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -991,29 +502,14 @@ r &amp; 0 &amp; 1 &amp; \frac{1}{\sqrt{2}} \\
 <div id="ref-croux2013robust" class="csl-entry">
 Croux, Christophe, Peter Filzmoser, and Heinrich Fritz. 2013. <span>“Robust Sparse Principal Component Analysis.”</span> <em>Technometrics</em> 55 (2): 202–14.
 </div>
-<div id="ref-fan2017high" class="csl-entry">
-Fan, Jianqing, Han Liu, Yang Ning, and Hui Zou. 2017. <span>“High Dimensional Semiparametric Latent Graphical Model for Mixed Data.”</span> <em>Journal of the Royal Statistical Society. Series B: Statistical Methodology</em> 79 (2): 405–21.
-</div>
 <div id="ref-filzmoser2021pcapp" class="csl-entry">
 Filzmoser, Peter, Heinrich Fritz, and Klaudius Kalcher. 2021. <em>pcaPP: Robust PCA by Projection Pursuit</em>. <a href="https://CRAN.R-project.org/package=pcaPP">https://CRAN.R-project.org/package=pcaPP</a>.
 </div>
 <div id="ref-fox2019poly" class="csl-entry">
 Fox, John. 2019. <em>Polycor: Polychoric and Polyserial Correlations</em>. <a href="https://CRAN.R-project.org/package=polycor">https://CRAN.R-project.org/package=polycor</a>.
 </div>
-<div id="ref-R-chebpol" class="csl-entry">
-Gaure, Simen. 2019. <em>Chebpol: Multivariate Interpolation</em>. <a href="https://github.com/sgaure/chebpol">https://github.com/sgaure/chebpol</a>.
-</div>
 <div id="ref-liu2009nonparanormal" class="csl-entry">
 Liu, Han, John Lafferty, and Larry Wasserman. 2009. <span>“The Nonparanormal: Semiparametric Estimation of High Dimensional Undirected Graphs.”</span> <em>Journal of Machine Learning Research</em> 10 (10).
-</div>
-<div id="ref-quan2018rank" class="csl-entry">
-Quan, Xiaoyun, James G Booth, and Martin T Wells. 2018. <span>“Rank-Based Approach for Estimating Correlations in Mixed Ordinal Data.”</span> <em>arXiv Preprint arXiv:1809.06255</em>.
-</div>
-<div id="ref-yoon2020sparse" class="csl-entry">
-Yoon, Grace, Raymond J Carroll, and Irina Gaynanova. 2020. <span>“Sparse Semiparametric Canonical Correlation Analysis for Data of Mixed Types.”</span> <em>Biometrika</em> 107 (3): 609–25.
-</div>
-<div id="ref-yoon2021fast" class="csl-entry">
-Yoon, Grace, Christian L Müller, and Irina Gaynanova. 2021. <span>“Fast Computation of Latent Correlations.”</span> <em>Journal of Computational and Graphical Statistics</em>, 1–8.
 </div>
 </div>
 </div>
