@@ -8,6 +8,7 @@ latentcor(
   X,
   types = NULL,
   method = c("approx", "original"),
+  use.nearPD = TRUE,
   nu = 0.001,
   tol = 1e-08,
   ratio = 0.9,
@@ -21,13 +22,15 @@ latentcor(
 
 \item{method}{The calculation method for latent correlations. Either \code{"original"} or \code{"approx"}. If \code{method = "approx"}, multilinear approximation method is used, which is much faster than the original method, see Yoon et al. (2021) for timing comparisons for various variable types. If \code{method = "original"}, optimization of the bridge inverse function is used. The default is \code{"approx"}.}
 
+\item{use.nearPD}{Logical indicator. \code{use.nearPD = TRUE} gets nearest positive definite matrix for the estimated latent correlation matrix with shrinkage adjustment by \code{nu}. Output \code{R} is the same as \code{Rpointwise} if \code{use.nearPD = FALSE}. Default value is \code{TRUE}.}
+
 \item{nu}{Shrinkage parameter for the correlation matrix, must be between 0 and 1. Guarantees that the minimal eigenvalue of returned correlation matrix is greater or equal to \code{nu}. When \code{nu = 0}, no shrinkage is performed, the returned correlation matrix will be semi-positive definite but not necessarily strictly positive definite. When \code{nu = 1}, the identity matrix is returned (not recommended).  The default (recommended) value is 0.001.}
 
 \item{tol}{When \code{method = "original"}, specifies the desired accuracy of the bridge function inversion via uniroot optimization and is passed to \code{\link{optimize}}. The default value is 1e-8. When \code{method = "approx"}, this parameter is ignored.}
 
 \item{ratio}{When \code{method = "approx"}, specifies the boundary value for multilinear interpolation, must be between 0 and 1. When \code{ratio = 0}, no linear interpolation is performed (the slowest execution) which is equivalent to \code{method = "original"}. When \code{ratio = 1}, linear interpolation is always performed (the fastest execution) but may lead to high approximation errors. The default (recommended) value is 0.9 which controls the approximation error and has fast execution, see Yoon et al. (2021) for details. When \code{method = "original"}, this parameter is ignored.}
 
-\item{showplot}{Logical indicator. \code{showplot = TRUE} generates a ggplot object \code{plotR} with the heatmap of latent correlation matrix \code{R}. \code{plotR = NULL} if \code{showplot = FALSE}.}
+\item{showplot}{Logical indicator. \code{showplot = TRUE} generates a ggplot object \code{plotR} with the heatmap of latent correlation matrix \code{R}. \code{plotR = NULL} if \code{showplot = FALSE}. Default value is \code{FALSE}.}
 }
 \value{
 \code{latentcor} returns
@@ -35,7 +38,7 @@ latentcor(
       \item{zratios: }{A list of of length p corresponding to each variable. Returns NA for continuous variable; proportion of zeros for binary/truncated variables; the cumulative proportions of zeros and ones (e.g. first value is proportion of zeros, second value is proportion of zeros and ones) for ternary variable. }
       \item{K: }{(p x p) Kendall Tau (Tau-a) Matrix for \code{X} }
       \item{R: }{(p x p) Estimated latent correlation matrix for \code{X} }
-      \item{Rpointwise: }{(p x p) Point-wise estimates of latent correlations for \code{X}. This matrix is not guaranteed to be semi-positive definite. If it is however, and if \code{nu=0}, then it will be the same as \code{R}.}
+      \item{Rpointwise: }{(p x p) Point-wise estimates of latent correlations for \code{X}. This matrix is not guaranteed to be semi-positive definite. This is the original estimated latent correlation matrix without adjustment for positive-definiteness.}
       \item{plotR: }{Heatmap plot of latent correlation matrix \code{R}, NULL if \code{showplot = FALSE}}
 }
 }

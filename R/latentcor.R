@@ -5,10 +5,11 @@
 #' @param X A numeric matrix or numeric data frame (n by p), where n is number of samples, and p is number of variables. Missing values (NA) are allowed, in which case the estimation is based on pairwise complete observations.
 #' @param types A vector of length p indicating the type of each of the p variables in \code{X}. Each element must be one of \code{"con"} (continuous), \code{"bin"} (binary), \code{"ter"} (ternary) or \code{"tru"} (truncated). If the vector has length 1, then all p variables are assumed to be of the same type that is supplied. The default value is \code{NULL}, and the variable types are determined automatically using function \code{\link{get_types}}. As automatic determination of variable types takes extra time, it is recommended to supply the types explicitly when they are known in advance.
 #' @param method The calculation method for latent correlations. Either \code{"original"} or \code{"approx"}. If \code{method = "approx"}, multilinear approximation method is used, which is much faster than the original method, see Yoon et al. (2021) for timing comparisons for various variable types. If \code{method = "original"}, optimization of the bridge inverse function is used. The default is \code{"approx"}.
+#' @param use.nearPD Logical indicator. \code{use.nearPD = TRUE} gets nearest positive definite matrix for the estimated latent correlation matrix with shrinkage adjustment by \code{nu}. Output \code{R} is the same as \code{Rpointwise} if \code{use.nearPD = FALSE}. Default value is \code{TRUE}.
 #' @param nu Shrinkage parameter for the correlation matrix, must be between 0 and 1. Guarantees that the minimal eigenvalue of returned correlation matrix is greater or equal to \code{nu}. When \code{nu = 0}, no shrinkage is performed, the returned correlation matrix will be semi-positive definite but not necessarily strictly positive definite. When \code{nu = 1}, the identity matrix is returned (not recommended).  The default (recommended) value is 0.001.
 #' @param tol When \code{method = "original"}, specifies the desired accuracy of the bridge function inversion via uniroot optimization and is passed to \code{\link{optimize}}. The default value is 1e-8. When \code{method = "approx"}, this parameter is ignored.
 #' @param ratio When \code{method = "approx"}, specifies the boundary value for multilinear interpolation, must be between 0 and 1. When \code{ratio = 0}, no linear interpolation is performed (the slowest execution) which is equivalent to \code{method = "original"}. When \code{ratio = 1}, linear interpolation is always performed (the fastest execution) but may lead to high approximation errors. The default (recommended) value is 0.9 which controls the approximation error and has fast execution, see Yoon et al. (2021) for details. When \code{method = "original"}, this parameter is ignored.
-#' @param showplot Logical indicator. \code{showplot = TRUE} generates a ggplot object \code{plotR} with the heatmap of latent correlation matrix \code{R}. \code{plotR = NULL} if \code{showplot = FALSE}.
+#' @param showplot Logical indicator. \code{showplot = TRUE} generates a ggplot object \code{plotR} with the heatmap of latent correlation matrix \code{R}. \code{plotR = NULL} if \code{showplot = FALSE}. Default value is \code{FALSE}.
 #' @details
 #' The function estimates latent correlation by calculating inverse bridge function (Fan et al., 2017) evaluated at the value of sample Kendall's tau (\eqn{\hat \tau}). The bridge function F connects Kendall's tau to latent correlation r so that \eqn{F(r) = E(\hat \tau)}. The form of function F depends on the variable types (continuous/binary/truncated/ternary), but is exact. The exact form of inverse is not available, so has to be evaluated numerically for each pair of variables leading to \code{Rpointwise}.
 #'
@@ -25,7 +26,7 @@
 #'       \item{zratios: }{A list of of length p corresponding to each variable. Returns NA for continuous variable; proportion of zeros for binary/truncated variables; the cumulative proportions of zeros and ones (e.g. first value is proportion of zeros, second value is proportion of zeros and ones) for ternary variable. }
 #'       \item{K: }{(p x p) Kendall Tau (Tau-a) Matrix for \code{X} }
 #'       \item{R: }{(p x p) Estimated latent correlation matrix for \code{X} }
-#'       \item{Rpointwise: }{(p x p) Point-wise estimates of latent correlations for \code{X}. This matrix is not guaranteed to be semi-positive definite. If it is however, and if \code{nu=0}, then it will be the same as \code{R}.}
+#'       \item{Rpointwise: }{(p x p) Point-wise estimates of latent correlations for \code{X}. This matrix is not guaranteed to be semi-positive definite. This is the original estimated latent correlation matrix without adjustment for positive-definiteness.}
 #'       \item{plotR: }{Heatmap plot of latent correlation matrix \code{R}, NULL if \code{showplot = FALSE}}
 #' }
 #'
@@ -47,7 +48,7 @@
 #' @export
 #' @example man/examples/latentcor_ex.R
 
-latentcor = function(X, types = NULL, method = c("approx", "original"), nu = 0.001, tol = 1e-8, ratio = 0.9, showplot = FALSE){
+latentcor = function(X, types = NULL, method = c("approx", "original"), use.nearPD = TRUE, nu = 0.001, tol = 1e-8, ratio = 0.9, showplot = FALSE){
   # Check the supplied parameters are compatible with what is expected
   if(nu < 0 | nu > 1){
     stop("nu must be between 0 and 1.")
@@ -85,7 +86,7 @@ latentcor = function(X, types = NULL, method = c("approx", "original"), nu = 0.0
   X = encodeX$X; types = encodeX$types; negate = encodeX$negate
   R = matrix(0, p, p); cp = rbind(row(R)[lower.tri(R)], col(R)[lower.tri(R)]); cp.col = ncol(cp)
   if (any(is.na(X))) {
-    K_a.lower = sapply(seq(p), function(i) Kendalltau(X[ , cp[ , i]]))
+    K_a.lower = sapply(seq(cp.col), function(i) Kendalltau(X[ , cp[ , i]]))
   } else {
     K_a.lower = Kendalltau(X)
   }
@@ -113,14 +114,12 @@ latentcor = function(X, types = NULL, method = c("approx", "original"), nu = 0.0
   R = R * outer(negate, negate)
   # Save values from pointwise estimation
   Rpointwise = R
-  # Check if the matrix is semi-pos.definite
-  R_min_eig = min(eigen(R)$values)
-  if (R_min_eig < 0) {
-    message("Using Matrix::nearPD since Minimum eigenvalue of latent correlation matrix is ", R_min_eig, " smaller than 0.")
+  if (use.nearPD) {
+    # Get nearest positive definite matrix.
     R = as.matrix(Matrix::nearPD(R, corr = TRUE)$mat)
+    # Do adjustmnet by nu - makes it strictly positive definite like ridge
+    R = (1 - nu) * R + nu * diag(nrow(R))
   }
-  # Do adjustmnet by nu - makes it strictly positive definite like ridge
-  R = (1 - nu) * R + nu * diag(nrow(R))
   colnames(K) = rownames(K) = colnames(R) = rownames(R) = colnames(Rpointwise) = rownames(Rpointwise) = make.names(c(name))
   plotR = NULL
   if (showplot) {

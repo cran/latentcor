@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mingze Huang, Christian L. Müller, Irina Gaynanova" />
 
-<meta name="date" content="2021-10-04" />
+<meta name="date" content="2021-10-30" />
 
 <title>latentcor</title>
 
@@ -163,7 +163,7 @@ div.csl-indent {
 
 <h1 class="title toc-ignore">latentcor</h1>
 <h4 class="author">Mingze Huang, Christian L. Müller, Irina Gaynanova</h4>
-<h4 class="date">2021-10-04</h4>
+<h4 class="date">2021-10-30</h4>
 
 
 
@@ -190,12 +190,12 @@ div.csl-indent {
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> simdata<span class="sc">$</span>X</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X, <span class="at">n =</span> 6L)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]       [,2]</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1 -1.5682561</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0  0.6227895</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    0  0.2543698</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0 -0.0799874</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    0 -0.6853879</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    0  1.0298423</span></span></code></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1  0.3625776</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0  0.1212378</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    0 -2.8421454</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    1 -0.3419534</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    1 -0.3748627</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    2  0.4412621</span></span></code></pre></div>
 <ul>
 <li><code>plotX</code>: NULL (<code>showplot = FALSE</code>, can be changed to display the plot of generated data in<code>gen_data</code> input).</li>
 </ul>
@@ -220,22 +220,22 @@ div.csl-indent {
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>K</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.2545455</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.2545455 1.0000000</span></span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.3147475</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.3147475 1.0000000</span></span></code></pre></div>
 <ul>
 <li><code>Rpointwise</code>: matrix of pointwise estimated correlations. Due to pointwise estimation, <code>Rpointwise</code> is not guaranteed to be positive semi-definite</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>Rpointwise</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.4630137</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.4630137 1.0000000</span></span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5647848</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5647848 1.0000000</span></span></code></pre></div>
 <ul>
-<li><code>R</code>: estimated final latent correlation matrix, this matrix is guaranteed to be strictly positive definite (through <code>nearPD</code> projection and parameter <code>nu</code>, see Mathematical framework for estimation)</li>
+<li><code>R</code>: estimated final latent correlation matrix, this matrix is guaranteed to be strictly positive definite (through <code>nearPD</code> projection and parameter <code>nu</code>, see Mathematical framework for estimation) if <code>use.nearPD = TRUE</code>.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>R</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.4625507</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.4625507 1.0000000</span></span></code></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         [,1]    [,2]</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.00000 0.56422</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.56422 1.00000</span></span></code></pre></div>
 <ul>
 <li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code> in <code>latentcor</code>. Otherwise displays a heatmap of latent correlation matrix.</li>
 </ul>
@@ -328,8 +328,7 @@ div.csl-indent {
 <span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1  2  3  4  6  8 </span></span>
 <span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 10  3 10  1  1</span></span></code></pre></div>
 <p>Then we can estimate the latent correlation matrix for all variables of <code>mtcars</code> by using <code>latentcor</code> function.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars <span class="ot">=</span> <span class="fu">latentcor</span>(mtcars, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Using Matrix::nearPD since Minimum eigenvalue of latent correlation matrix is -0.203053866491842 smaller than 0.</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars <span class="ot">=</span> <span class="fu">latentcor</span>(mtcars, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;con&quot;</span>))</span></code></pre></div>
 <p>Note that the determination of variable types can also be done automatically by <code>latentcor</code> package using <code>get_types</code> function:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_types</span>(mtcars)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;con&quot; &quot;ter&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;bin&quot; &quot;bin&quot; &quot;ter&quot; &quot;con&quot;</span></span></code></pre></div>
@@ -482,7 +481,7 @@ div.csl-indent {
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> start_time</span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.02    0.00    0.02</span></span></code></pre></div>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.03    0.00    0.03</span></span></code></pre></div>
 <p>Compared with</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">=</span> <span class="fu">proc.time</span>()</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
@@ -493,7 +492,7 @@ div.csl-indent {
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> start_time</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.03    0.00    0.03</span></span></code></pre></div>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.04    0.00    0.03</span></span></code></pre></div>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
