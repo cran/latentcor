@@ -45,17 +45,17 @@ estimate$zratios
 estimate$Rpointwise
 
 ## ----callR2, warning = FALSE, message = F-------------------------------------
-estimate = latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx")
+#estimate = latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx")
 
 ## ----estimate3, warning = FALSE, message = F----------------------------------
-latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.99)$R
-latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.4)$R
+#latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.99)$R
+#latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.4)$R
 latentcor(X, types = c("con", "bin", "ter", "tru"), method = "original")$R
 
 ## ----speed, warning = FALSE, message = F--------------------------------------
 library(microbenchmark)
-microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.99)$R)
-microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.4)$R)
+#microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.99)$R)
+#microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.4)$R)
 microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "original")$R)
 
 ## ---- message = FALSE---------------------------------------------------------
