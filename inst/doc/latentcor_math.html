@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mingze Huang, Christian L. Müller, Irina Gaynanova" />
 
-<meta name="date" content="2022-06-05" />
+<meta name="date" content="2022-08-09" />
 
 <title>Mathematical Framework for latentcor</title>
 
@@ -357,7 +357,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Mathematical Framework for latentcor</h1>
 <h4 class="author">Mingze Huang, Christian L. Müller, Irina
 Gaynanova</h4>
-<h4 class="date">2022-06-05</h4>
+<h4 class="date">2022-08-09</h4>
 
 
 
@@ -374,12 +374,12 @@ monotonically increasing <span class="math inline">\(f=(f_{j})_{j=1}^{p}\)</span
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">gen_data</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;con&quot;</span>)<span class="sc">$</span>X</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>X</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1]</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] -1.4648440</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -1.9476468</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] -1.4063030</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] -1.7492057</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]  1.5108260</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] -0.7666238</span></span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] -2.0294153</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]  0.4821440</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] -0.6598498</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.6519477</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] -0.8944721</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]  0.2133992</span></span></code></pre></div>
 <p><strong><em>Definition of binary model</em></strong> <span class="citation">(Fan et al. 2017)</span></p>
 <p>A random <span class="math inline">\(X\in\cal{R}^{p}\)</span>
 satisfies the binary latent Gaussian copula model if there exists <span class="math inline">\(W\sim NPN(0, \Sigma, f)\)</span> such that <span class="math inline">\(X_{j}=I(W_{j}&gt;c_{j})\)</span>, where <span class="math inline">\(I(\cdot)\)</span> is the indicator function and
@@ -387,11 +387,11 @@ satisfies the binary latent Gaussian copula model if there exists <span class="m
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">gen_data</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;bin&quot;</span>)<span class="sc">$</span>X</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    0</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    1</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    1</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    0</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    1</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    0</span></span></code></pre></div>
 <p><strong><em>Definition of ternary model</em></strong> <span class="citation">(Quan, Booth, and Wells 2018)</span></p>
 <p>A random <span class="math inline">\(X\in\cal{R}^{p}\)</span>
@@ -402,10 +402,10 @@ are constants.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">gen_data</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">types =</span> <span class="st">&quot;ter&quot;</span>)<span class="sc">$</span>X</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    0</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    1</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    1</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    2</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    1</span></span></code></pre></div>
 <p><strong><em>Definition of truncated or zero-inflated
@@ -421,11 +421,11 @@ and <span class="math inline">\(c_{j}\)</span> are constants.</p>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.0000000</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.6103469</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 0.1799312</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.6153479</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 1.0366820</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] 0.0000000</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] 0.0000000</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] 0.9376093</span></span></code></pre></div>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] 0.1454566</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,] 0.0000000</span></span></code></pre></div>
 <p><strong><em>Mixed latent Gaussian copula model</em></strong></p>
 <p>The mixed latent Gaussian copula model jointly models <span class="math inline">\(W=(W_{1}, W_{2}, W_{3}, W_{4})\sim NPN(0, \Sigma,
 f)\)</span> such that <span class="math inline">\(X_{1j}=W_{1j}\)</span>, <span class="math inline">\(X_{2j}=I(W_{2j}&gt;c_{2j})\)</span>, <span class="math inline">\(X_{3j}=I(W_{3j}&gt;c_{3j})+I(W_{3j}&gt;c&#39;_{3j})\)</span>
@@ -847,8 +847,8 @@ computations.</p>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unit: milliseconds</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                                        expr</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  latentcor(X, types = c(&quot;con&quot;, &quot;bin&quot;, &quot;ter&quot;, &quot;tru&quot;), method = &quot;original&quot;)$R</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      min       lq     mean   median      uq     max neval</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  30.2064 31.60805 32.11969 31.90575 32.3184 39.0063   100</span></span></code></pre></div>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      min       lq     mean  median      uq     max neval</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  29.6924 30.39565 31.97882 31.1445 32.7477 41.6821   100</span></span></code></pre></div>
 <p><strong>Rescaled Grid for Interpolation</strong></p>
 <p>Since <span class="math inline">\(|\hat{\tau}|\le
 \bar{\tau}\)</span>, the grid does not need to cover the whole domain
@@ -859,7 +859,7 @@ is as defined above.</p>
 <p>In addition, for ternary variable <span class="math inline">\(j\)</span>, it always holds that <span class="math inline">\(\Delta_{j}^{2}&gt;\Delta_{j}^{1}\)</span> since
 <span class="math inline">\(\Delta_{j}^{1}=\Phi^{-1}(\pi_{0j})\)</span>
 and <span class="math inline">\(\Delta_{j}^{2}=\Phi^{-1}(\pi_{0j}+\pi_{1j})\)</span>.
-Thus, the grid should not cover the the area corresponding to <span class="math inline">\(\Delta_{j}^{2}\ge\Delta_{j}^{1}\)</span>. We thus
+Thus, the grid should not cover the the area corresponding to <span class="math inline">\(\Delta_{j}^{2}\le\Delta_{j}^{1}\)</span>. We thus
 rescale as follows: <span class="math inline">\(\check{\Delta}_{j}^{1}=\Delta_{j}^{1}/\Delta_{j}^{2}\in[0,
 1]\)</span>; <span class="math inline">\(\check{\Delta}_{j}^{2}=\Delta_{j}^{2}\in[0,
 1]\)</span>.</p>
@@ -900,12 +900,12 @@ larger)</p>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">latentcor</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>))</span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Rpointwise</span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1]       [,2]      [,3]       [,4]</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0000000 -0.1478256 0.9990000  0.8552597</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.1478256  1.0000000 0.3518165 -0.5038608</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.9990000  0.3518165 1.0000000  0.9230076</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.8552597 -0.5038608 0.9230076  1.0000000</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0000000 -0.1477240 0.9990000  0.8548518</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.1477240  1.0000000 0.3523666 -0.5030324</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.9990000  0.3523666 1.0000000  0.9114307</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.8548518 -0.5030324 0.9114307  1.0000000</span></span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="fu">eigen</span>(out<span class="sc">$</span>Rpointwise)<span class="sc">$</span>values</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  2.8675835  1.2890526  0.1017831 -0.2584192</span></span></code></pre></div>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  2.85954424  1.29130852  0.09944544 -0.25029820</span></span></code></pre></div>
 <p><code>latentcor</code> automatically corrects the pointwise estimator
 to be positive definite by making two adjustments. First, if
 <code>Rpointwise</code> has smallest eigenvalue less than zero, the
@@ -924,16 +924,16 @@ nearest positive semi-definite matrix to <code>Rpointwise</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">latentcor</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">nu =</span> <span class="fl">0.001</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Rpointwise</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1]       [,2]      [,3]       [,4]</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0000000 -0.1478256 0.9990000  0.8552597</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.1478256  1.0000000 0.3518165 -0.5038608</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.9990000  0.3518165 1.0000000  0.9230076</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.8552597 -0.5038608 0.9230076  1.0000000</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0000000 -0.1477240 0.9990000  0.8548518</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.1477240  1.0000000 0.3523666 -0.5030324</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.9990000  0.3523666 1.0000000  0.9114307</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.8548518 -0.5030324 0.9114307  1.0000000</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>R</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [,1]       [,2]      [,3]       [,4]</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0000000 -0.1057756 0.9237208  0.9059303</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.1057756  1.0000000 0.2335396 -0.4215559</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.9237208  0.2335396 1.0000000  0.7770754</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.9059303 -0.4215559 0.7770754  1.0000000</span></span></code></pre></div>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0000000 -0.1053533 0.9232992  0.9048072</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] -0.1053533  1.0000000 0.2372115 -0.4244433</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.9232992  0.2372115 1.0000000  0.7723678</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  0.9048072 -0.4244433 0.7723678  1.0000000</span></span></code></pre></div>
 <p>As a result, <code>R</code> and <code>Rpointwise</code> could be
 quite different when sample size <span class="math inline">\(n\)</span>
 is small. When <span class="math inline">\(n\)</span> is large and <span class="math inline">\(p\)</span> is moderate, the difference is
@@ -943,16 +943,16 @@ typically driven by parameter <code>nu</code>.</p>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">latentcor</span>(X, <span class="at">types =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;bin&quot;</span>, <span class="st">&quot;ter&quot;</span>, <span class="st">&quot;tru&quot;</span>), <span class="at">nu =</span> <span class="fl">0.001</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>Rpointwise</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5529903 0.4480984 0.5826171</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5529903 1.0000000 0.4050223 0.5821513</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 0.4480984 0.4050223 1.0000000 0.4653875</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] 0.5826171 0.5821513 0.4653875 1.0000000</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5528213 0.4476819 0.5823120</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5528213 1.0000000 0.4058967 0.5808889</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 0.4476819 0.4058967 1.0000000 0.4567771</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] 0.5823120 0.5808889 0.4567771 1.0000000</span></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>R</span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5524373 0.4476503 0.5820345</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5524373 1.0000000 0.4046173 0.5815691</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 0.4476503 0.4046173 1.0000000 0.4649222</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] 0.5820345 0.5815691 0.4649222 1.0000000</span></span></code></pre></div>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5522684 0.4472342 0.5817297</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5522684 1.0000000 0.4054908 0.5803080</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,] 0.4472342 0.4054908 1.0000000 0.4563203</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,] 0.5817297 0.5803080 0.4563203 1.0000000</span></span></code></pre></div>
 </div>
 </div>
 <div id="appendix" class="section level1">

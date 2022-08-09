@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mingze Huang, Christian L. Müller, Irina Gaynanova" />
 
-<meta name="date" content="2022-06-05" />
+<meta name="date" content="2022-08-09" />
 
 <title>latentcor</title>
 
@@ -357,7 +357,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">latentcor</h1>
 <h4 class="author">Mingze Huang, Christian L. Müller, Irina
 Gaynanova</h4>
-<h4 class="date">2022-06-05</h4>
+<h4 class="date">2022-08-09</h4>
 
 
 
@@ -405,12 +405,12 @@ is the continuous variable.</li>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> simdata<span class="sc">$</span>X</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X, <span class="at">n =</span> 6L)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]       [,2]</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    0 -2.6337025</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    2  1.3035232</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    1 -0.9587770</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    0 -0.6916586</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    1  2.6137621</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    2  1.5969643</span></span></code></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1 -0.6277007</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    0 -0.3704386</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]    2  0.1226226</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]    1  0.9109610</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,]    1  0.5216188</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6,]    2  0.7521775</span></span></code></pre></div>
 <ul>
 <li><code>plotX</code>: NULL (<code>showplot = FALSE</code>, can be
 changed to display the plot of generated data in<code>gen_data</code>
@@ -446,17 +446,17 @@ these 2 variables.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>K</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.3159596</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.3159596 1.0000000</span></span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.3086869</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.3086869 1.0000000</span></span></code></pre></div>
 <ul>
 <li><code>Rpointwise</code>: matrix of pointwise estimated correlations.
 Due to pointwise estimation, <code>Rpointwise</code> is not guaranteed
 to be positive semi-definite</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>Rpointwise</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          [,1]     [,2]</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.000000 0.567188</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.567188 1.000000</span></span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5546911</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5546911 1.0000000</span></span></code></pre></div>
 <ul>
 <li><code>R</code>: estimated final latent correlation matrix, this
 matrix is guaranteed to be strictly positive definite (through
@@ -466,8 +466,8 @@ Mathematical framework for estimation) if
 </ul>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>estimate<span class="sc">$</span>R</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5666208</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5666208 1.0000000</span></span></code></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 1.0000000 0.5541364</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 0.5541364 1.0000000</span></span></code></pre></div>
 <ul>
 <li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code>
 in <code>latentcor</code>. Otherwise displays a heatmap of latent
@@ -568,8 +568,7 @@ of <code>mtcars</code> by using <code>latentcor</code> function.</p>
 <p>Note that the determination of variable types can also be done
 automatically by <code>latentcor</code> package using
 <code>get_types</code> function:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_types</span>(mtcars)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;con&quot; &quot;ter&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;con&quot; &quot;bin&quot; &quot;bin&quot; &quot;ter&quot; &quot;con&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars <span class="ot">=</span> <span class="fu">latentcor</span>(mtcars, <span class="at">types =</span> <span class="fu">get_types</span>(mtcars))</span></code></pre></div>
 <p>This function is run automatically inside <code>latentcor</code> if
 the <code>types</code> are not supplied by the user, however the
 automatic determination of types takes extra time, so we recommend to
@@ -651,57 +650,57 @@ for <code>mtcars</code>.</li>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>Rpointwise</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9990000 -0.9286530 -0.9099905  0.65616525 -0.9046652</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9990000  1.0000000  0.9990000  0.9900378 -0.77249088  0.9525997</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9990000  1.0000000  0.9990000  0.9900378 -0.77195772  0.9525997</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9286530  0.9990000  1.0000000  0.8552768 -0.69582182  0.9151697</span></span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9099905  0.9900378  0.8552768  1.0000000 -0.55293425  0.8097609</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6561652 -0.7724909 -0.6958218 -0.5529342  1.00000000 -0.7483492</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6561652 -0.7719577 -0.6958218 -0.5529342  1.00000000 -0.7483492</span></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9046652  0.9525997  0.9151697  0.8097609 -0.74834918  1.0000000</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4713967 -0.6546712 -0.4517316 -0.6680316  0.05064917 -0.2198737</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8728630 -0.9623421 -0.8907279 -0.9188458  0.57712804 -0.7419429</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.7180179 -0.7126399 -0.7889528 -0.4748333  0.85733375 -0.9122083</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6239541 -0.7084703 -0.6789845 -0.4122124  0.80293582 -0.7620924</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6368382  0.6029528  0.5370028  0.7247928 -0.12947951  0.4880685</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4713967 -0.6540431 -0.4517316 -0.6680316  0.05064917 -0.2198737</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8727316 -0.9623421 -0.8905658 -0.9188458  0.57685875 -0.7416377</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.7178533 -0.7124468 -0.7888268 -0.4746999  0.85723711 -0.9121559</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6234660 -0.7106595 -0.6786359 -0.4119442  0.80260415 -0.7617271</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6368382  0.6025491  0.5370028  0.7247928 -0.12947951  0.4880685</span></span>
 <span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec         vs          am       gear        carb</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.47139674  0.8728630  0.71801794  0.6239541 -0.63683817</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.65467117 -0.9623421 -0.71263992 -0.7084703  0.60295281</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.45173164 -0.8907279 -0.78895282 -0.6789845  0.53700280</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.66803158 -0.9188458 -0.47483329 -0.4122124  0.72479279</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.05064917  0.5771280  0.85733375  0.8029358 -0.12947951</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.21987367 -0.7419429 -0.91220830 -0.7620924  0.48806852</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.9599123 -0.27020739 -0.1386652 -0.64170875</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.95991229  1.0000000  0.27235685  0.4085779 -0.76890808</span></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.27020739  0.2723569  1.00000000  0.9989985 -0.08287215</span></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.13866516  0.4085779  0.99899853  1.0000000  0.13099316</span></span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.64170875 -0.7689081 -0.08287215  0.1309932  1.00000000</span></span></code></pre></div>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.47139674  0.8727316  0.71785333  0.6234660 -0.63683817</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.65404313 -0.9623421 -0.71244682 -0.7106595  0.60254911</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.45173164 -0.8905658 -0.78882677 -0.6786359  0.53700280</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.66803158 -0.9188458 -0.47469992 -0.4119442  0.72479279</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.05064917  0.5768588  0.85723711  0.8026041 -0.12947951</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.21987367 -0.7416377 -0.91215587 -0.7617271  0.48806852</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.9599123 -0.27004807 -0.1385035 -0.64170875</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.95991229  1.0000000  0.27236999  0.4087924 -0.76863616</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.27004807  0.2723700  1.00000000  0.9941583 -0.08284094</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.13850346  0.4087924  0.99415828  1.0000000  0.13086286</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.64170875 -0.7686362 -0.08284094  0.1308629  1.00000000</span></span></code></pre></div>
 <ul>
 <li><code>R</code>: estimated final latent correlation matrix for
 <code>mtcars</code>.</li>
 </ul>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>estimate_mtcars<span class="sc">$</span>R</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             mpg        cyl       disp         hp        drat         wt</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9608747 -0.9404131 -0.9152802  0.66642619 -0.9179963</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9608747  1.0000000  0.9650010  0.9349197 -0.74128052  0.9124383</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9404131  0.9650010  1.0000000  0.8621830 -0.71257487  0.9338857</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9152802  0.9349197  0.8621830  1.0000000 -0.55840804  0.8154479</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6664262 -0.7412805 -0.7125749 -0.5584080  1.00000000 -0.7641521</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9179963  0.9124383  0.9338857  0.8154479 -0.76415208  1.0000000</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4828342 -0.5746332 -0.4633543 -0.6784444  0.07287856 -0.2323983</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8542399 -0.9215304 -0.8490640 -0.9228387  0.53245113 -0.7087644</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.6958925 -0.6708196 -0.7388726 -0.4747629  0.82554325 -0.8692830</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6383813 -0.6628455 -0.7068625 -0.4233901  0.82357786 -0.7841403</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6403397  0.5951207  0.5465031  0.7269460 -0.13831943  0.4939547</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   1.0000000 -0.9608749 -0.9404695 -0.9153219  0.66638283 -0.9179476</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.9608749  1.0000000  0.9650156  0.9346973 -0.74121240  0.9125875</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.9404695  0.9650156  1.0000000  0.8622172 -0.71261891  0.9339336</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.9153219  0.9346973  0.8622172  1.0000000 -0.55835884  0.8154551</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.6663828 -0.7412124 -0.7126189 -0.5583588  1.00000000 -0.7640859</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.9179476  0.9125875  0.9339336  0.8154551 -0.76408588  1.0000000</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  0.4827478 -0.5741600 -0.4631657 -0.6785315  0.07261583 -0.2322193</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.8541286 -0.9212463 -0.8488590 -0.9228202  0.53220265 -0.7085704</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am    0.6957798 -0.6710066 -0.7387695 -0.4747351  0.82546004 -0.8694336</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear  0.6378821 -0.6636071 -0.7061776 -0.4231995  0.82301630 -0.7835243</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.6403560  0.5944601  0.5464094  0.7269360 -0.13825503  0.4939057</span></span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             qsec         vs          am       gear        carb</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.48283423  0.8542399  0.69589255  0.6383813 -0.64033967</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.57463321 -0.9215304 -0.67081964 -0.6628455  0.59512065</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.46335433 -0.8490640 -0.73887260 -0.7068625  0.54650313</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.67844443 -0.9228387 -0.47476288 -0.4233901  0.72694597</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.07287856  0.5324511  0.82554325  0.8235779 -0.13831943</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.23239826 -0.7087644 -0.86928295 -0.7841403  0.49395472</span></span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.8397730 -0.21462948 -0.1260015 -0.65996479</span></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.83977303  1.0000000  0.33939416  0.3611504 -0.72945700</span></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.21462948  0.3393942  1.00000000  0.9354150 -0.06698013</span></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.12600152  0.3611504  0.93541504  1.0000000  0.11730955</span></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.65996479 -0.7294570 -0.06698013  0.1173095  1.00000000</span></span></code></pre></div>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mpg   0.48274782  0.8541286  0.69577977  0.6378821 -0.64035597</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cyl  -0.57415996 -0.9212463 -0.67100656 -0.6636071  0.59446007</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; disp -0.46316567 -0.8488590 -0.73876946 -0.7061776  0.54640944</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; hp   -0.67853152 -0.9228202 -0.47473508 -0.4231995  0.72693596</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; drat  0.07261583  0.5322026  0.82546004  0.8230163 -0.13825503</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; wt   -0.23221928 -0.7085704 -0.86943361 -0.7835243  0.49390573</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; qsec  1.00000000  0.8398496 -0.21520264 -0.1246468 -0.66023665</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; vs    0.83984962  1.0000000  0.33897317  0.3619248 -0.72932209</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; am   -0.21520264  0.3389732  1.00000000  0.9336415 -0.06770134</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; gear -0.12464675  0.3619248  0.93364152  1.0000000  0.11758995</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; carb -0.66023665 -0.7293221 -0.06770134  0.1175900  1.00000000</span></span></code></pre></div>
 <ul>
 <li><code>plotR</code>: NULL by default as <code>showplot = FALSE</code>
 in <code>latentcor</code>. Otherwise displays a heatmap of latent
@@ -739,7 +738,7 @@ subsamples, each of size 80.</p>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> start_time</span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.91    0.03    0.94</span></span></code></pre></div>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.02    0.00    0.03</span></span></code></pre></div>
 <p>Compared with</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">=</span> <span class="fu">proc.time</span>()</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
@@ -750,7 +749,7 @@ subsamples, each of size 80.</p>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> start_time</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.86    0.03    0.89</span></span></code></pre></div>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.03    0.00    0.04</span></span></code></pre></div>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

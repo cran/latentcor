@@ -50,7 +50,7 @@ apply(mtcars, 2, table)
 estimate_mtcars = latentcor(mtcars, types = c("con", "ter", "con", "con", "con", "con", "con", "bin", "bin", "ter", "con"))
 
 ## ----mtcars_types, message = FALSE--------------------------------------------
-get_types(mtcars)
+estimate_mtcars = latentcor(mtcars, types = get_types(mtcars))
 
 ## ----mtcars_estimation_output-------------------------------------------------
 names(estimate_mtcars)

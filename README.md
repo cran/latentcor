@@ -13,7 +13,7 @@
 
 `latentcor` is an `R` package for estimation of latent correlations with mixed data types (continuous, binary, truncated, and ternary) under the latent Gaussian copula model. For references on the estimation framework, see
 
-  * [Fan, J., Liu, H., Ning, Y., and Zou, H. (2017), “High Dimensional Semiparametric Latent Graphical Model for Mixed Data.” *JRSS B*](https://doi.org/10.1111/rssb.12168). **Continuous/binary** types.
+  * [Fan, J., Liu, H., Ning, Y., and Zou, H. (2017), “High Dimensional Semiparametric Latent Graphical Model for Mixed Data.” *JRSS B*](https://arxiv.org/abs/1404.7236). **Continuous/binary** types.
 
   * [Quan X., Booth J.G. and Wells M.T."Rank-based approach for estimating correlations in mixed ordinal data." *arXiv*](https://arxiv.org/abs/1809.06255) **Ternary** type.
 
@@ -26,6 +26,10 @@
 No R software package is currently available that allows accurate and fast correlation estimation from mixed variable data in a unifying manner. The R package [`latentcor`](https://CRAN.R-project.org/package=latentcor), introduced here, thus represents the first stand-alone R package for 
 computation of latent correlation that takes into account all variable types (continuous/binary/ordinal/zero-inflated), comes with an optimized memory footprint, 
 and is computationally efficient, essentially making latent correlation estimation almost as fast as rank-based correlation estimation. 
+
+**Multi-linear interpolation:** Earlier versions of `latentcor` used multi-linear interpolation based on functionality of R package [`chebpol`](https://cran.r-project.org/package=chebpol) written by Simen Gaure. This functionality is needed for faster computations of latent correlations with approximation method. However, `chebpol` was removed from CRAN on 2022-02-07. The current version of `latentcor` reuses the multi-linear interpolation part of the  `chebpol` (provided under Artistic-2 license) integrated directly within `latentcor`. To cite multi-linear interpolation only, please use original [`chebpol`](https://cran.r-project.org/package=chebpol).
+
+**Accuracy:** The approximation method for ternary/ternary, truncated(zero-inflated)/ternary, and ternary/binary cases are less accurate close to boundary (zero proportions) due to size limitations of CRAN packages on the pre-stored grid.  If higher accuracy is desired and original method is computationally prohibitive, latencor is also available as [Python package](https://pypi.org/project/latentcor/) with [Github development python version](https://github.com/mingzehuang/latentcor_py)
 
 ## Installation
 
