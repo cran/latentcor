@@ -1,7 +1,7 @@
 Package: latentcor
 Type: Package
 Title: Fast Computation of Latent Correlations for Mixed Data
-Version: 2.0.0
+Version: 2.0.1
 Authors@R: c(
     person(given = "Mingze",
            family = "Huang",
@@ -43,10 +43,10 @@ Suggests: rmarkdown, markdown, knitr, testthat (>= 3.0.0), lattice,
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2022-08-09 05:03:12 UTC; mingz
+Packaged: 2022-09-05 20:16:14 UTC; mingz
 Author: Mingze Huang [aut, cre] (<https://orcid.org/0000-0003-3919-1564>),
   Grace Yoon [aut] (<https://orcid.org/0000-0003-3263-1352>),
   Christian M&uuml;ller [aut] (<https://orcid.org/0000-0002-3821-7083>),
   Irina Gaynanova [aut] (<https://orcid.org/0000-0002-4116-0268>)
 Repository: CRAN
-Date/Publication: 2022-08-09 05:20:02 UTC
+Date/Publication: 2022-09-05 20:50:02 UTC
