@@ -17,17 +17,17 @@
 #'
 #' When \code{method = "approx"}, the inversion is done approximately by interpolating previously calculated and stored values of \eqn{F^{-1}(\hat \tau)}. This is significantly faster than the original method (Yoon et al., 2021) for binary/ternary/truncated cases, however the approximation errors may be non-negligible on some regions of the space. The parameter \code{ratio} controls the region where the interpolation is performed with default recommended value of 0.9 giving a good balance of accuracy and computational speed . Increasing the value of ratio may improve speed (but possibly sacrifice the accuracy), whereas decreasing the value of ratio my improve accuracy (but possibly sacrifice the speed). See Yoon et al. 2021 and vignette for more details.
 #'
-#'  In case the pointwise estimator \code{Rpointwise} is has negative eigenvalues, it is projected onto the space of positive semi-definite matrices using \code{\link{nearPD}}. The parameter \code{nu} further allows to perform additional shrinkage towards identity matrix (desirable in cases where the number of variables p is very large) as
+#'  In case the pointwise estimator \code{Rpointwise} is has negative eigenvalues, it is projected onto the space of positive semi-definite matrices using \code{\link[Matrix]{nearPD}}. The parameter \code{nu} further allows to perform additional shrinkage towards identity matrix (desirable in cases where the number of variables p is very large) as
 #'  \deqn{R = (1 - \nu) \tilde R + \nu I,}
-#'  where \eqn{\tilde R} is \code{Rpointwise} after projection by \code{\link{nearPD}}.
+#'  where \eqn{\tilde R} is \code{Rpointwise} after projection by \code{\link[Matrix]{nearPD}}.
 #'
 #' @return \code{latentcor} returns
 #' \itemize{
-#'       \item{zratios: }{A list of of length p corresponding to each variable. Returns NA for continuous variable; proportion of zeros for binary/truncated variables; the cumulative proportions of zeros and ones (e.g. first value is proportion of zeros, second value is proportion of zeros and ones) for ternary variable. }
-#'       \item{K: }{(p x p) Kendall Tau (Tau-a) Matrix for \code{X} }
-#'       \item{R: }{(p x p) Estimated latent correlation matrix for \code{X} }
-#'       \item{Rpointwise: }{(p x p) Point-wise estimates of latent correlations for \code{X}. This matrix is not guaranteed to be semi-positive definite. This is the original estimated latent correlation matrix without adjustment for positive-definiteness.}
-#'       \item{plotR: }{Heatmap plot of latent correlation matrix \code{R}, NULL if \code{showplot = FALSE}}
+#'       \item zratios: A list of of length p corresponding to each variable. Returns NA for continuous variable; proportion of zeros for binary/truncated variables; the cumulative proportions of zeros and ones (e.g. first value is proportion of zeros, second value is proportion of zeros and ones) for ternary variable.
+#'       \item K: (p x p) Kendall Tau (Tau-a) Matrix for \code{X}
+#'       \item R: (p x p) Estimated latent correlation matrix for \code{X}
+#'       \item Rpointwise: (p x p) Point-wise estimates of latent correlations for \code{X}. This matrix is not guaranteed to be semi-positive definite. This is the original estimated latent correlation matrix without adjustment for positive-definiteness.
+#'       \item plotR: Heatmap plot of latent correlation matrix \code{R}, NULL if \code{showplot = FALSE}
 #' }
 #'
 #' @references

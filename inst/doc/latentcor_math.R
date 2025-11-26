@@ -58,7 +58,7 @@ library(microbenchmark)
 #microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "approx", ratio = 0.4)$R)
 microbenchmark(latentcor(X, types = c("con", "bin", "ter", "tru"), method = "original")$R)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 set.seed("234820")
 X = gen_data(n = 6, types = c("con", "bin", "ter", "tru"))$X
 X
@@ -66,7 +66,7 @@ out = latentcor(X, types = c("con", "bin", "ter", "tru"))
 out$Rpointwise
 eigen(out$Rpointwise)$values
 
-## ---- message = TRUE----------------------------------------------------------
+## ----message = TRUE-----------------------------------------------------------
 out = latentcor(X, types = c("con", "bin", "ter", "tru"))
 
 ## -----------------------------------------------------------------------------
